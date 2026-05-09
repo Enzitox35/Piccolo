@@ -1,16 +1,10 @@
 import streamlit as st
-
 import sqlite3
+from database import obtener_usuarios, insertar_usuario, actualizar_usuario, eliminar_usuario
 
-from database import *
-crear_base_datos()
-
-
-# Configuración de la página
-st.set_page_config(page_title="Sistema Piccolo", page_icon="https://www.pngall.com/wp-content/uploads/15/Piccolo-PNG-Images-HD.png", layout="wide") #👴
-
-# 🔹 1. Conexión a la base (arriba de todo)
-conn = sqlite3.connect("mi_base.db")
+# 🔹 1. Conexión a la base (Asegúrate de que el nombre coincida con tu archivo)
+# Usamos "piccolo.db" que es el que vimos que tenías en tu carpeta
+conn = sqlite3.connect("piccolo.db")
 cursor = conn.cursor()
 
 cursor.execute("""
@@ -29,10 +23,14 @@ opcion = st.sidebar.radio("Ir a:", ["Inicio", "Recordatorios", "Contactos", "Con
 if opcion == "Inicio":
     st.title("☀️ ¡Buen día!")
     st.write("Bienvenido al *Sistema Piccolo*. ¿En qué puedo ayudarte hoy?")
-    # Aquí puedes poner la imagen que mencionamos antes
-    st.image(r"C:\Users\usuario\Piccolo\Piccolo-IA.jpeg", caption="Asistente para Adultos Mayores")
+    
+    # 🖼️ Imagen corregida (Ruta relativa)
+    try:
+        st.image("Piccolo-IA.jpeg", use_container_width=True)
+    except:
+        st.warning("No se pudo cargar la imagen Piccolo-IA.jpeg. Verifica que el archivo esté en la carpeta.")
 
- # 🔽 MENÚ INTERNO DE USUARIOS
+    # 🔽 MENÚ INTERNO DE USUARIOS
     st.divider()
     st.subheader("👤 Gestión de usuarios")
 
@@ -105,7 +103,6 @@ if opcion == "Inicio":
 elif opcion == "Recordatorios":
     st.title("📅 Mis Recordatorios")
     st.write("Aquí verás tus medicamentos y turnos médicos.")
-    # Próximamente: Conexión a SQLite
 
 elif opcion == "Contactos":
     st.title("📞 Contactos de Emergencia")
