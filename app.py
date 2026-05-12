@@ -1,6 +1,12 @@
 import streamlit as st
 import sqlite3
-from database import obtener_usuarios, insertar_usuario, actualizar_usuario, eliminar_usuario
+# Importamos las funciones con sus nuevos nombres del Sistema Piccolo
+from database import (
+    obtener_personas, 
+    agregar_persona, 
+    actualizar_persona, 
+    eliminar_persona
+)
 
 # 🔹 1. Conexión a la base (Asegúrate de que el nombre coincida con tu archivo)
 # Usamos "piccolo.db" que es el que vimos que tenías en tu carpeta
@@ -40,7 +46,7 @@ if opcion == "Inicio":
         horizontal=True
     )
 
-    usuarios = obtener_usuarios()
+    usuarios =  obtener_personas
 
     # =========================
     # ➕ REGISTRAR
@@ -53,7 +59,7 @@ if opcion == "Inicio":
             if nombre.strip() == "":
                 st.warning("El nombre no puede estar vacío")
             else:
-                insertar_usuario(nombre, edad)
+                agregar_persona("Nombre", edad),
                 st.success("Usuario guardado")
                 st.rerun()
 
