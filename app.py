@@ -62,7 +62,7 @@ if opcion == "Inicio":
     # =========================
     # ✏️ EDITAR
     # =========================
-    elif accion == "✏️ Editar":
+    elif accion == "✏️ Editar Usuario":
         if usuarios:
             opciones = {f"{u['nombre']} (ID: {u['id']})": u for u in usuarios}
             usuario_sel = st.selectbox("Seleccionar usuario", list(opciones.keys()), key="edit_select")
