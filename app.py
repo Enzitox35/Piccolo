@@ -1,26 +1,16 @@
 import streamlit as st
-
+from gtts import gTTS
 import sqlite3
 
 from database import *
 crear_base_datos()
 
+conexion = sqlite3.connect("piccolo.db")
+
+cursor = conexion.cursor()
 
 # Configuración de la página
 st.set_page_config(page_title="Sistema Piccolo", page_icon="https://www.pngall.com/wp-content/uploads/15/Piccolo-PNG-Images-HD.png", layout="wide") #👴
-
-# 🔹 1. Conexión a la base (arriba de todo)
-conn = sqlite3.connect("mi_base.db")
-cursor = conn.cursor()
-
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS usuarios (
-    id INTEGER PRIMARY KEY,
-    nombre TEXT,
-    edad INTEGER
-)
-""")
-conn.commit()
 
 # Menú Lateral
 st.sidebar.title("Navegación")
@@ -110,3 +100,98 @@ elif opcion == "Recordatorios":
 elif opcion == "Contactos":
     st.title("📞 Contactos de Emergencia")
     st.write("Listado de personas a las que puedes llamar rápidamente.")
+
+    st.title("Chat con voz")
+
+mensaje = st.text_input("Escribí algo")
+
+if mensaje:
+
+    mensaje = mensaje.lower()
+
+    # =========================
+    # DETECTAR INTENCION
+    # =========================
+
+    if "sirve" in mensaje:
+
+        columna = "para_que_sirve"
+
+    elif "cuidado" in mensaje:
+
+        columna = "tener_cuidado"
+
+    elif "consejo" in mensaje:
+
+        columna = "consejo_amigable"
+
+    elif "tipo" in mensaje:
+
+        columna = "tipo"
+
+    else:
+
+        columna = "que_hace"
+
+    # =========================
+    # DETECTAR MEDICAMENTO
+    # =========================
+
+    medicamentos = [
+        "enalapril",
+        "metformina",
+        "omeprazol",
+        "losartán",
+        "clonazepam"
+    ]
+
+    medicamento_detectado = None
+
+    for med in medicamentos:
+
+        if med in mensaje:
+
+            medicamento_detectado = med
+            break
+
+    # =========================
+    # CONSULTAR BASE
+    # =========================
+
+    if medicamento_detectado:
+
+        resultado = obtener_dato_medicina(
+            columna,
+            medicamento_detectado
+        )
+
+        if resultado:
+
+            respuesta = resultado[0]
+
+        else:
+
+            respuesta = "No encontré información"
+
+    else:
+
+        respuesta = "No reconocí el medicamento"
+
+    # =========================
+    # TEXTO
+    # =========================
+
+    st.write(respuesta)
+
+    # =========================
+    # AUDIO
+    # =========================
+
+    tts = gTTS(
+        text=respuesta,
+        lang="es"
+    )
+
+    tts.save("respuesta.mp3")
+
+    st.audio("respuesta.mp3")
