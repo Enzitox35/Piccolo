@@ -196,6 +196,64 @@ def eliminar_persona(persona_id):
 # =========================
 # CONSULTAS DE MEDICAMENTOS
 # =========================
+def buscar_medicina_por_dolencia(mensaje_usuario):
+    """
+    Busca en el corpus de saberes qué medicamento aplica según la dolencia,
+    síntoma o dolor específico que describe el adulto mayor.
+    """
+    conn = get_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute("SELECT nombre_medicina, para_que_sirve, que_hace, para_quien, consejo_amigable FROM saberes_piccolo")
+    todos_los_saberes = cursor.fetchall()
+    conn.close()
+    
+    mensaje_usuario = mensaje_usuario.lower()
+    
+    for saber in todos_los_saberes:
+        para_que_sirve = (saber["para_que_sirve"] or "").lower()
+        que_hace = (saber["que_hace"] or "").lower()
+        para_quien = (saber["para_quien"] or "").lower()
+        nombre_medicina = saber["nombre_medicina"].lower()
+        
+        palabras_clave = []
+        
+        # 🧠 DOLOR DE CABEZA / PRESIÓN
+        if "presion" in mensaje_usuario or "presión" in mensaje_usuario or "hipertension" in mensaje_usuario or "cabeza" in mensaje_usuario or "nuca" in mensaje_usuario:
+            palabras_clave = ["presión", "presion", "antihipertensivo", "cabeza"]
+            
+        # 🥑 DOLOR DE PANZA / ACIDEZ
+        elif "panza" in mensaje_usuario or "estomago" in mensaje_usuario or "estómago" in mensaje_usuario or "acidez" in mensaje_usuario or "gastritis" in mensaje_usuario or "reflujo" in mensaje_usuario or "digestión" in mensaje_usuario or "digestion" in mensaje_usuario:
+            palabras_clave = ["estómago", "estomago", "acidez", "gastritis", "reflujo", "gastroprotector", "digestión"]
+            
+        # 🍬 AZÚCAR / GLUCEMIA
+        elif "azucar" in mensaje_usuario or "azúcar" in mensaje_usuario or "diabetes" in mensaje_usuario or "glucemia" in mensaje_usuario:
+            palabras_clave = ["azúcar", "azucar", "diabético", "diabetes"]
+            
+        # 🥩 COLESTEROL
+        elif "colesterol" in mensaje_usuario or "grasa" in mensaje_usuario:
+            palabras_clave = ["colesterol", "grasas"]
+            
+        # 🦋 TIROIDES
+        elif "tiroides" in mensaje_usuario or "hipotiroidismo" in mensaje_usuario:
+            palabras_clave = ["tiroides", "hormona"]
+            
+        # 🫀 CORAZÓN / PECHO
+        elif "corazon" in mensaje_usuario or "corazón" in mensaje_usuario or "coagulo" in mensaje_usuario or "pecho" in mensaje_usuario:
+            palabras_clave = ["corazón", "corazon", "coágulos", "coagulos", "angina"]
+            
+        # 💧 RETENCIÓN DE LÍQUIDO
+        elif "liquido" in mensaje_usuario or "líquido" in mensaje_usuario or "hinchado" in mensaje_usuario or "orinar" in mensaje_usuario or "piernas" in mensaje_usuario or "tobillos" in mensaje_usuario:
+            palabras_clave = ["líquido", "liquido", "retención", "diurético"]
+            
+        # 🧘 ANSIEDAD / NERVIOS
+        elif "ansiedad" in mensaje_usuario or "nervioso" in mensaje_usuario or "dormir" in mensaje_usuario or "asustado" in mensaje_usuario or "ataque" in mensaje_usuario or "calmar" in mensaje_usuario:
+            palabras_clave = ["ansiedad", "nervioso", "ansiolítico", "tranquiliza"]
+
+        if any(p in para_que_sirve or p in que_hace or p in para_quien for p in palabras_clave) or nombre_medicina in mensaje_usuario:
+            return dict(saber)
+            
+    return None
 def obtener_dato_medicina(columna, medicamento):
     conn = get_connection()
     cursor = conn.cursor()

@@ -2,31 +2,30 @@ import streamlit as st
 from gtts import gTTS
 import sqlite3
 
-# Importamos las funciones con sus nombres actualizados del Sistema Piccolo
+# ==========================================
+# IMPORTACIONES DEL SISTEMA PICCOLO (CORREGIDO)
+# ==========================================
 from database import (
     obtener_personas, 
     agregar_persona, 
     actualizar_persona, 
     eliminar_persona,
     crear_base_datos,
-    obtener_todos_saberes  # Asegúrate de tener esta o la función equivalente para consultar medicinas
+    buscar_medicina_por_dolencia,  # <-- Agregado correctamente
+    obtener_dato_medicina         # <-- Agregado correctamente
 )
 
-# 💻 CONFIGURACIÓN DE LA PÁGINA (De la versión entrante de main)
+# 💻 CONFIGURACIÓN DE LA PÁGINA
 st.set_page_config(
     page_title="Sistema Piccolo", 
     page_icon="https://www.pngall.com/wp-content/uploads/15/Piccolo-PNG-Images-HD.png", 
     layout="wide"
 )
 
-# Inicializamos la base de datos oficial del equipo
+# Inicializamos la base de datos oficial
 crear_base_datos()
 
-# Conexión limpia a la base de datos
-conexion = sqlite3.connect("piccolo.db")
-cursor = conexion.cursor()
-
-# Menú Lateral
+# Menú Lateral de Navegación
 st.sidebar.title("Navegación")
 opcion = st.sidebar.radio("Ir a:", ["Inicio", "Recordatorios", "Contactos", "Configuración"])
 
@@ -50,7 +49,6 @@ if opcion == "Inicio":
         horizontal=True
     )
 
-    # Llamamos a la función para traer la lista actualizada de personas
     usuarios = obtener_personas()
 
     # =========================
@@ -64,7 +62,6 @@ if opcion == "Inicio":
             if nombre.strip() == "":
                 st.warning("El nombre no puede estar vacío")
             else:
-                # Corregido: pasamos la variable 'nombre' en lugar del texto fijo "Nombre"
                 agregar_persona(nombre, edad)
                 st.success("Usuario guardado con éxito")
                 st.rerun()
@@ -72,7 +69,7 @@ if opcion == "Inicio":
     # =========================
     # ✏️ EDITAR
     # =========================
-    elif accion == "✏️ Editar":  # Corregido para que coincida exactamente con la opción del radio button
+    elif accion == "✏️ Editar":
         if usuarios:
             opciones = {f"{u['nombre']} (ID: {u['id']})": u for u in usuarios}
             usuario_sel = st.selectbox("Seleccionar usuario", list(opciones.keys()), key="edit_select")
@@ -86,7 +83,6 @@ if opcion == "Inicio":
                 if nuevo_nombre.strip() == "":
                     st.warning("El nombre no puede estar vacío")
                 else:
-                    # Corregido: usamos el nombre de función importado 'actualizar_persona'
                     actualizar_persona(user["id"], nuevo_nombre, nueva_edad, user.get("quien_avisar", ""))
                     st.success("Usuario actualizado con éxito")
                     st.rerun()
@@ -105,7 +101,6 @@ if opcion == "Inicio":
 
             if st.button("Eliminar", key="btn_eliminar"):
                 if confirmar:
-                    # Corregido: usamos el nombre de función importado 'eliminar_persona'
                     eliminar_persona(opciones[usuario_sel])
                     st.success("Usuario eliminado")
                     st.rerun()
@@ -119,63 +114,94 @@ elif opcion == "Recordatorios":
     st.write("Aquí verás tus medicamentos y turnos médicos.")
 
 elif opcion == "Contactos":
-    st.title("📞 Contactos de Emergencia")
-    st.write("Listado de personas a las que puedes llamar rápidamente.")
+    st.title("📞 Mi Compañero de Emergencias y Asistencia")
+    st.write("Acá tenés tus contactos rápidos y podés charlar con Piccolo sobre cómo te sentís.")
 
-    st.title("Chat con voz")
+    # Tarjetas de asistencia rápida en pantalla grande para el abuelo
+    col1, col2 = st.columns(2)
+    with col1:
+        st.error("🚨 EMERGENCIAS (Ambulancia): Llamar al 107")
+    with col2:
+        st.info("☎️ Mi Contacto de Confianza: (Hijo / Vecino / Familiar)")
 
-    mensaje = st.text_input("Escribí algo")
+    st.divider()
+    st.title("🗣️ Charlá con Piccolo")
+    st.subheader("Hola, acá estoy para acompañarte. Contame, ¿cómo te sentís hoy? ¿Te duele algo?")
+
+    # Guía visual amigable para el usuario mayor
+    st.info("Ejemplos de cómo podés hablarle a Piccolo: \n* *'Me duele mucho la panza'* \n* *'Me siento mareado y me duele la cabeza'* \n* *'¿Para qué sirve el Enalapril?'*")
+
+    mensaje = st.text_input("Escribí acá tu dolencia o consulta:", key="chat_asistencia_sola")
 
     if mensaje:
-        mensaje = mensaje.lower()
+        mensaje_limpio = mensaje.lower()
+        
+        # 1. Intentamos buscar por dolencia general (dolor de panza, cabeza, etc.)
+        medicina_encontrada = buscar_medicina_por_dolencia(mensaje_limpio)
 
-        # =========================
-        # DETECTAR INTENCION
-        # =========================
-        if "sirve" in mensaje:
-            columna = "para_que_sirve"
-        elif "cuidado" in mensaje:
-            columna = "tener_cuidado"
-        elif "consejo" in mensaje:
-            columna = "consejo_amigable"
-        elif "tipo" in mensaje:
-            columna = "tipo"
-        else:
-            columna = "que_hace"
-
-        # =========================
-        # DETECTAR MEDICAMENTO
-        # =========================
-        medicamentos = ["enalapril", "metformina", "omeprazol", "losartán", "clonazepam"]
-        medicamento_detectado = None
-
-        for med in medicamentos:
-            if med in mensaje:
-                medicamento_detectado = med
-                break
-
-        # =========================
-        # CONSULTAR BASE
-        # =========================
-        if medicamento_detectado:
-            # Nota técnica: Asegúrate de que la función 'obtener_dato_medicina' exista en tu base de datos,
-            # o cámbiala por una consulta directa usando 'cursor' si es necesario.
-            try:
-                cursor.execute(f"SELECT {columna} FROM saberes_medicamentos WHERE LOWER(nombre_medicina) = ?", (medicamento_detectado,))
-                resultado = cursor.fetchone()
+        if medicina_encontrada:
+            nombre = medicina_encontrada["nombre_medicina"]
+            sirve = medicina_encontrada["para_que_sirve"]
+            consejo = medicina_encontrada["consejo_amigable"]
+            cuidado = medicina_encontrada.get("tener_cuidado", "")
+            
+            respuesta = (
+                f"Te escucho con atención. Para eso que me contás de que te sentís así, "
+                f"acordate que tenés recetado tomar {nombre}, que justamente {sirve}. "
+                f"Mi consejo amigable de hoy: {consejo}. "
+            )
+            if cuidado:
+                respuesta += f" Eso sí, recordá tener este cuidado: {cuidado}."
                 
-                if resultado and resultado[0]:
-                    respuesta = resultado[0]
-                else:
-                    respuesta = f"No encontré información específica sobre eso para el medicamento {medicamento_detectado}."
-            except:
-                respuesta = "Hubo un error al consultar la base de datos de medicamentos."
+            st.success(f"💊 Inteligencia de Síntomas - Medicación: {nombre}")
+            
         else:
-            respuesta = "No reconocí el medicamento en tu mensaje. Probá mencionando enalapril, metformina, omeprazol, losartán o clonazepam."
+            # 2. Si no es un síntoma, evaluamos si preguntó por un nombre directo de medicamento
+            medicamentos = ["enalapril", "metformina", "omeprazol", "losartán", "losartan", "clonazepam", "atorvastatina", "levotiroxina", "amlodipina", "aspirina", "furosemida"]
+            medicamento_detectado = None
+
+            for med in medicamentos:
+                if med in mensaje_limpio:
+                    medicamento_detectado = med
+                    break
+
+            if medicamento_detectado:
+                # Detectamos qué columna quiere saber
+                if "sirve" in mensaje_limpio or "para que" in mensaje_limpio:
+                    columna = "para_que_sirve"
+                elif "cuidado" in mensaje_limpio or "peligro" in mensaje_limpio:
+                    columna = "tener_cuidado"
+                elif "consejo" in mensaje_limpio or "tip" in mensaje_limpio:
+                    columna = "consejo_amigable"
+                elif "tipo" in mensaje_limpio or "clase" in mensaje_limpio:
+                    columna = "tipo"
+                else:
+                    columna = "que_hace"
+
+                try:
+                    resultado = obtener_dato_medicina(columna, medicamento_detectado)
+                    if resultado and resultado[0]:
+                        respuesta = f"Sobre el {medicamento_detectado.capitalize()}: {resultado[0]}"
+                    else:
+                        respuesta = f"Encontré el medicamento {medicamento_detectado.capitalize()}, pero no tengo detalles sobre {columna.replace('_', ' ')}."
+                except Exception as e:
+                    respuesta = "Hubo un problema al consultar el saber de Piccolo en la base de datos."
+                
+                st.info(f"🔍 Consulta directa de Medicamento")
+            else:
+                # 3. Si no es síntoma ni remedio conocido, alerta protectora de soledad
+                respuesta = (
+                    "Es un dolor o malestar que no tengo registrado en tu listado de remedios habituales, "
+                    "y como estás solito, no quiero que pases un mal momento. Si el dolor es muy fuerte o seguís mal, "
+                    "por favor descansá un poquito, avisale a tu contacto de confianza o llamá al médico. "
+                    "¿Querés que volvamos a intentar explicarlo con otras palabras?"
+                )
+                st.warning("⚠️ Consejo de cuidado")
 
         # =========================
-        # TEXTO Y AUDIO OUTPUT
+        # OUTPUT: TEXTO Y AUDIO CONVERTIDO (Unificado)
         # =========================
+        st.markdown(f"### 🤖 Piccolo te acompaña y te dice:")
         st.write(respuesta)
 
         try:
@@ -183,4 +209,8 @@ elif opcion == "Contactos":
             tts.save("respuesta.mp3")
             st.audio("respuesta.mp3")
         except Exception as e:
-            st.error("No se pudo generar el audio de respuesta.")
+            st.error("No pude hablarte en este momento, pero podés leer mi mensaje acá arriba.")
+
+elif opcion == "Configuración":
+    st.title("⚙️ Configuración")
+    st.write("Ajustes internos del Sistema Piccolo.")
