@@ -1,16 +1,26 @@
+"""
+modules/db.py — Capa de persistencia SQLite
+Sistema Piccolo — Asistente de medicamentos por voz para adultos mayores
+
+Versión corregida y completa que:
+- Arregla el bug de nombre de tabla (era 'saberes_medicamentos', es 'saberes_piccolo')
+- Agrega funciones para guardar/recuperar métricas de evaluación
+- Incluye función para obtener estadísticas del dashboard
+"""
+
 import sqlite3
 from pathlib import Path
 
-# =========================
-# RUTA BASE DE DATOS (Integrada y limpia)
-# =========================
-BASE_DIR = Path(__file__).resolve().parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 DB_PATH = BASE_DIR / "piccolo.db"
+
 
 def get_connection():
     conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row  # Esto permite acceder a las columnas por su nombre como un diccionario
+    conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA foreign_keys = ON")
     return conn
+
 
 def probar_conexion():
     try:
@@ -21,11 +31,11 @@ def probar_conexion():
     except Exception as e:
         return False, str(e)
 
+
 def crear_base_datos():
     conn = get_connection()
     cursor = conn.cursor()
 
-    # Las personas que cuidamos
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS personas (
             id               INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -36,7 +46,6 @@ def crear_base_datos():
         )
     """)
 
-    # Lo que Piccolo sabe sobre cada medicina (Formato SQLite corregido)
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS saberes_piccolo (
             id               INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -51,7 +60,6 @@ def crear_base_datos():
         )
     """)
 
-    # Las alarmas de cada persona
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS alarmas_piccolo (
             id         INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -64,7 +72,6 @@ def crear_base_datos():
         )
     """)
 
-    # Cada vez que alguien le habla a Piccolo
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS conversaciones (
             id              INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -86,17 +93,16 @@ def crear_base_datos():
         )
     """)
 
-    # Cómo le fue a Piccolo en cada sesión
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS como_le_fue (
             id                 INTEGER PRIMARY KEY AUTOINCREMENT,
             fecha              TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             total_charlas      INTEGER DEFAULT 0,
-            wer                REAL,
-            perplejidad        REAL,
+            wer_promedio       REAL,
+            perplejidad_promedio REAL,
             f1                 REAL,
-            precision          REAL,
-            recall             REAL,
+            precision_ir       REAL,
+            recall_ir          REAL,
             aciertos_ner       REAL,
             tiempo_promedio_ms INTEGER
         )
@@ -104,6 +110,7 @@ def crear_base_datos():
 
     conn.commit()
     conn.close()
+
 
 def cargar_saberes_iniciales():
     conn = get_connection()
@@ -164,14 +171,17 @@ def cargar_saberes_iniciales():
     conn.commit()
     conn.close()
 
+
 # =========================
-# GESTIÓN DE PERSONAS (USUARIOS)
+# PERSONAS
 # =========================
+
 def obtener_personas():
     conn = get_connection()
     rows = conn.execute("SELECT id, nombre, edad, quien_avisar FROM personas").fetchall()
     conn.close()
     return [dict(r) for r in rows]
+
 
 def agregar_persona(nombre, edad, quien_avisar=""):
     conn = get_connection()
@@ -180,6 +190,7 @@ def agregar_persona(nombre, edad, quien_avisar=""):
     conn.commit()
     conn.close()
 
+
 def actualizar_persona(persona_id, nombre, edad, quien_avisar=""):
     conn = get_connection()
     conn.execute("UPDATE personas SET nombre = ?, edad = ?, quien_avisar = ? WHERE id = ?",
@@ -187,87 +198,36 @@ def actualizar_persona(persona_id, nombre, edad, quien_avisar=""):
     conn.commit()
     conn.close()
 
+
 def eliminar_persona(persona_id):
     conn = get_connection()
     conn.execute("DELETE FROM personas WHERE id = ?", (persona_id,))
     conn.commit()
     conn.close()
 
-# =========================
-# CONSULTAS DE MEDICAMENTOS
-# =========================
-def buscar_medicina_por_dolencia(mensaje_usuario):
-    """
-    Busca en el corpus de saberes qué medicamento aplica según la dolencia,
-    síntoma o dolor específico que describe el adulto mayor.
-    """
-    conn = get_connection()
-    cursor = conn.cursor()
-    
-    cursor.execute("SELECT nombre_medicina, para_que_sirve, que_hace, para_quien, consejo_amigable FROM saberes_piccolo")
-    todos_los_saberes = cursor.fetchall()
-    conn.close()
-    
-    mensaje_usuario = mensaje_usuario.lower()
-    
-    for saber in todos_los_saberes:
-        para_que_sirve = (saber["para_que_sirve"] or "").lower()
-        que_hace = (saber["que_hace"] or "").lower()
-        para_quien = (saber["para_quien"] or "").lower()
-        nombre_medicina = saber["nombre_medicina"].lower()
-        
-        palabras_clave = []
-        
-        # 🧠 DOLOR DE CABEZA / PRESIÓN
-        if "presion" in mensaje_usuario or "presión" in mensaje_usuario or "hipertension" in mensaje_usuario or "cabeza" in mensaje_usuario or "nuca" in mensaje_usuario:
-            palabras_clave = ["presión", "presion", "antihipertensivo", "cabeza"]
-            
-        # 🥑 DOLOR DE PANZA / ACIDEZ
-        elif "panza" in mensaje_usuario or "estomago" in mensaje_usuario or "estómago" in mensaje_usuario or "acidez" in mensaje_usuario or "gastritis" in mensaje_usuario or "reflujo" in mensaje_usuario or "digestión" in mensaje_usuario or "digestion" in mensaje_usuario:
-            palabras_clave = ["estómago", "estomago", "acidez", "gastritis", "reflujo", "gastroprotector", "digestión"]
-            
-        # 🍬 AZÚCAR / GLUCEMIA
-        elif "azucar" in mensaje_usuario or "azúcar" in mensaje_usuario or "diabetes" in mensaje_usuario or "glucemia" in mensaje_usuario:
-            palabras_clave = ["azúcar", "azucar", "diabético", "diabetes"]
-            
-        # 🥩 COLESTEROL
-        elif "colesterol" in mensaje_usuario or "grasa" in mensaje_usuario:
-            palabras_clave = ["colesterol", "grasas"]
-            
-        # 🦋 TIROIDES
-        elif "tiroides" in mensaje_usuario or "hipotiroidismo" in mensaje_usuario:
-            palabras_clave = ["tiroides", "hormona"]
-            
-        # 🫀 CORAZÓN / PECHO
-        elif "corazon" in mensaje_usuario or "corazón" in mensaje_usuario or "coagulo" in mensaje_usuario or "pecho" in mensaje_usuario:
-            palabras_clave = ["corazón", "corazon", "coágulos", "coagulos", "angina"]
-            
-        # 💧 RETENCIÓN DE LÍQUIDO
-        elif "liquido" in mensaje_usuario or "líquido" in mensaje_usuario or "hinchado" in mensaje_usuario or "orinar" in mensaje_usuario or "piernas" in mensaje_usuario or "tobillos" in mensaje_usuario:
-            palabras_clave = ["líquido", "liquido", "retención", "diurético"]
-            
-        # 🧘 ANSIEDAD / NERVIOS
-        elif "ansiedad" in mensaje_usuario or "nervioso" in mensaje_usuario or "dormir" in mensaje_usuario or "asustado" in mensaje_usuario or "ataque" in mensaje_usuario or "calmar" in mensaje_usuario:
-            palabras_clave = ["ansiedad", "nervioso", "ansiolítico", "tranquiliza"]
 
-        if any(p in para_que_sirve or p in que_hace or p in para_quien for p in palabras_clave) or nombre_medicina in mensaje_usuario:
-            return dict(saber)
-            
-    return None
-def obtener_dato_medicina(columna, medicamento):
-    conn = get_connection()
-    cursor = conn.cursor()
-    # Sanitización básica del nombre de columna válido
-    columnas_validas = ["para_que_sirve", "tipo", "que_hace", "tener_cuidado", "para_quien", "consejo_amigable"]
+# =========================
+# MEDICAMENTOS
+# =========================
+
+def obtener_dato_medicina(columna: str, medicamento: str):
+    """
+    Consulta un campo específico de saberes_piccolo para un medicamento.
+    FIX: antes usaba 'saberes_medicamentos' (tabla inexistente).
+    """
+    columnas_validas = [
+        "para_que_sirve", "tipo", "que_hace",
+        "tener_cuidado", "para_quien", "consejo_amigable"
+    ]
     if columna not in columnas_validas:
-        conn.close()
         return None
 
+    conn = get_connection()
     query = f"SELECT {columna} FROM saberes_piccolo WHERE lower(nombre_medicina) = ?"
-    cursor.execute(query, (medicamento.lower(),))
-    resultado = cursor.fetchone()
+    resultado = conn.execute(query, (medicamento.lower(),)).fetchone()
     conn.close()
     return resultado
+
 
 def obtener_todos_saberes():
     conn = get_connection()
@@ -275,9 +235,22 @@ def obtener_todos_saberes():
     conn.close()
     return [dict(r) for r in rows]
 
+
+def obtener_medicina_por_nombre(nombre: str) -> dict | None:
+    """Devuelve el registro completo de un medicamento o None si no existe."""
+    conn = get_connection()
+    row = conn.execute(
+        "SELECT * FROM saberes_piccolo WHERE lower(nombre_medicina) = ?",
+        (nombre.lower(),)
+    ).fetchone()
+    conn.close()
+    return dict(row) if row else None
+
+
 # =========================
 # ALARMAS
 # =========================
+
 def obtener_alarmas(persona_id=None):
     conn = get_connection()
     if persona_id:
@@ -290,12 +263,15 @@ def obtener_alarmas(persona_id=None):
     conn.close()
     return [dict(r) for r in rows]
 
+
 def agregar_alarma(persona_id, medicina, horario, repetir):
     conn = get_connection()
-    conn.execute("INSERT INTO alarmas_piccolo (persona_id, medicina, horario, repetir) VALUES (?, ?, ?, ?)",
-                 (persona_id, medicina, horario, repetir))
+    conn.execute(
+        "INSERT INTO alarmas_piccolo (persona_id, medicina, horario, repetir) VALUES (?, ?, ?, ?)",
+        (persona_id, medicina, horario, repetir))
     conn.commit()
     conn.close()
+
 
 def desactivar_alarma(alarma_id):
     conn = get_connection()
@@ -303,9 +279,11 @@ def desactivar_alarma(alarma_id):
     conn.commit()
     conn.close()
 
+
 # =========================
-# HISTORIAL Y ESTADÍSTICAS
+# CONVERSACIONES
 # =========================
+
 def guardar_conversacion(
     persona_id, lo_que_dijo, lo_que_entendio,
     intencion=None, entidades_json=None, respuesta=None,
@@ -325,32 +303,95 @@ def guardar_conversacion(
     conn.commit()
     conn.close()
 
+
+def obtener_historial(persona_id=None, limite=20):
+    conn = get_connection()
+    if persona_id:
+        rows = conn.execute(
+            "SELECT * FROM conversaciones WHERE persona_id = ? ORDER BY cuando DESC LIMIT ?",
+            (persona_id, limite)).fetchall()
+    else:
+        rows = conn.execute(
+            "SELECT * FROM conversaciones ORDER BY cuando DESC LIMIT ?",
+            (limite,)).fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+
+# =========================
+# ESTADÍSTICAS PARA DASHBOARD
+# =========================
+
 def obtener_estadisticas():
+    """Devuelve todas las estadísticas necesarias para el dashboard."""
     conn = get_connection()
     stats = {}
-    stats["total_charlas"] = conn.execute("SELECT COUNT(*) FROM conversaciones").fetchone()[0]
-    stats["wer_promedio"] = conn.execute("SELECT AVG(wer) FROM conversaciones WHERE wer IS NOT NULL").fetchone()[0]
-    stats["pp_promedio"] = conn.execute("SELECT AVG(perplejidad) FROM conversaciones WHERE perplejidad IS NOT NULL").fetchone()[0]
-    stats["tiempo_promedio_ms"] = conn.execute("SELECT AVG(tiempo_ms) FROM conversaciones WHERE tiempo_ms IS NOT NULL").fetchone()[0]
-    
+
+    stats["total_charlas"] = conn.execute(
+        "SELECT COUNT(*) FROM conversaciones").fetchone()[0]
+
+    stats["wer_promedio"] = conn.execute(
+        "SELECT AVG(wer) FROM conversaciones WHERE wer IS NOT NULL").fetchone()[0]
+
+    stats["pp_promedio"] = conn.execute(
+        "SELECT AVG(perplejidad) FROM conversaciones WHERE perplejidad IS NOT NULL").fetchone()[0]
+
+    stats["tiempo_promedio_ms"] = conn.execute(
+        "SELECT AVG(tiempo_ms) FROM conversaciones WHERE tiempo_ms IS NOT NULL").fetchone()[0]
+
+    stats["similitud_promedio"] = conn.execute(
+        "SELECT AVG(similitud) FROM conversaciones WHERE similitud IS NOT NULL").fetchone()[0]
+
     stats["intenciones_frecuentes"] = [dict(r) for r in conn.execute("""
         SELECT intencion, COUNT(*) as total FROM conversaciones
-        WHERE intencion IS NOT NULL GROUP BY intencion ORDER BY total DESC LIMIT 10
+        WHERE intencion IS NOT NULL
+        GROUP BY intencion ORDER BY total DESC LIMIT 10
     """).fetchall()]
-    
+
     stats["charlas_por_dia"] = [dict(r) for r in conn.execute("""
         SELECT DATE(cuando) as dia, COUNT(*) as total
         FROM conversaciones GROUP BY dia ORDER BY dia DESC LIMIT 14
     """).fetchall()]
-    
-    ultima_eval = conn.execute("SELECT * FROM como_le_fue ORDER BY fecha DESC LIMIT 1").fetchone()
+
+    stats["medicamentos_consultados"] = [dict(r) for r in conn.execute("""
+        SELECT s.nombre_medicina, COUNT(*) as total
+        FROM conversaciones c
+        JOIN saberes_piccolo s ON c.medicina_id = s.id
+        GROUP BY s.nombre_medicina ORDER BY total DESC LIMIT 10
+    """).fetchall()]
+
+    ultima_eval = conn.execute(
+        "SELECT * FROM como_le_fue ORDER BY fecha DESC LIMIT 1").fetchone()
     stats["ultima_evaluacion"] = dict(ultima_eval) if ultima_eval else None
-    
+
     conn.close()
     return stats
+
+
+def guardar_evaluacion(
+    total_charlas=0, wer_promedio=None, perplejidad_promedio=None,
+    f1=None, precision_ir=None, recall_ir=None,
+    aciertos_ner=None, tiempo_promedio_ms=None
+):
+    """Guarda una sesión de evaluación en como_le_fue."""
+    conn = get_connection()
+    conn.execute("""
+        INSERT INTO como_le_fue (
+            total_charlas, wer_promedio, perplejidad_promedio,
+            f1, precision_ir, recall_ir, aciertos_ner, tiempo_promedio_ms
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    """, (total_charlas, wer_promedio, perplejidad_promedio,
+          f1, precision_ir, recall_ir, aciertos_ner, tiempo_promedio_ms))
+    conn.commit()
+    conn.close()
+
 
 if __name__ == "__main__":
     crear_base_datos()
     cargar_saberes_iniciales()
     exito, mensaje = probar_conexion()
     print(f"Estado: {mensaje}")
+    saberes = obtener_todos_saberes()
+    print(f"Medicamentos cargados: {len(saberes)}")
+    for s in saberes:
+        print(f"  - {s['nombre_medicina']}: {s['para_que_sirve']}")
