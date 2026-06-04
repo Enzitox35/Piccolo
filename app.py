@@ -367,14 +367,18 @@ with st.sidebar:
         opcion = "admin"
         st.info("Modo Gestión activo")
     else:
-        opcion = st.radio("", [
-            "🏠  Inicio",
-            "💬  Consultar",
-            "📊  Dashboard",
-            "🔬  Evaluación",
-            "📞  Emergencias",
-        ])
-
+       opcion = st.radio(
+            "Menú de navegación",
+            [
+                "🏠  Inicio",
+                "💬  Consultar",
+                "📊  Dashboard",
+                "🔬  Evaluación",
+                "📞  Emergencias",
+            ],
+            label_visibility="collapsed"
+        )
+       
 if not MODULOS_OK:
     st.error("Error al cargar módulos")
     st.code(DETALLE_ERROR)
