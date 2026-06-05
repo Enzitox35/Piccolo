@@ -210,5 +210,3 @@ El dashboard muestra en tiempo real:
 | wordcloud | Nube de palabras |
 | matplotlib | Gráficos |
 | pandas | Manejo de datos |
-
-

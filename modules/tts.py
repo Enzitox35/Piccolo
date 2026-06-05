@@ -37,7 +37,7 @@ def sintetizar_voz(texto: str, idioma: str = "es") -> dict:
         # Limpiar el texto un poco para mejor pronunciación
         texto_limpio = _limpiar_texto_para_tts(texto)
 
-        tts = gTTS(text=texto_limpio, lang=idioma, slow=False, tld="com.ar")
+        tts = gTTS(text=texto_limpio, lang=idioma, slow=False)
 
         buffer = io.BytesIO()
         tts.write_to_fp(buffer)

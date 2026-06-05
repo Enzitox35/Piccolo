@@ -1,0 +1,8 @@
+streamlit>=1.35.0
+gTTS>=2.5.0
+SpeechRecognition>=3.10.0
+pydub>=0.25.1
+spacy>=3.7.0
+pandas>=2.0.0
+wordcloud>=1.9.0
+matplotlib>=3.7.0
