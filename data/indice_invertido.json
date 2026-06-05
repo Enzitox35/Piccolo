@@ -1,0 +1,1036 @@
+{
+  "documentos": [
+    {
+      "id": "enalapril",
+      "titulo": "Enalapril",
+      "texto": "El enalapril sirve para bajar la presión de la sangre. Es un antihipertensivo que relaja los vasos sanguíneos para que el corazón trabaje con más calma. Mejor no tomarlo si estás embarazada. Está indicado para presión alta. Tomalo siempre a la misma hora del día, como un ritual."
+    },
+    {
+      "id": "metformina",
+      "titulo": "Metformina",
+      "texto": "La metformina ayuda a controlar el azúcar en la sangre. Es un antidiabético que le dice al cuerpo cómo usar mejor el azúcar. Avisale al médico si tenés problemas de riñón. Está indicada para diabetes tipo dos. Tomala con la comida, así el estómago lo agradece."
+    },
+    {
+      "id": "atorvastatina",
+      "titulo": "Atorvastatina",
+      "texto": "La atorvastatina baja el colesterol malo. Es un hipolipemiante que limpia las grasas que se acumulan en la sangre. No tomar con jugo de pomelo. Está indicada para colesterol alto. La noche es el mejor momento para tomarla."
+    },
+    {
+      "id": "omeprazol",
+      "titulo": "Omeprazol",
+      "texto": "El omeprazol protege el estómago y calma la acidez. Es un gastroprotector que reduce el ácido que produce el estómago. Si lo tomás mucho tiempo hablá con tu médico. Está indicado para acidez gastritis reflujo. Tomalo media hora antes del desayuno con un vasito de agua."
+    },
+    {
+      "id": "losartan",
+      "titulo": "Losartán",
+      "texto": "El losartán baja la presión y cuida los riñones. Es un antihipertensivo que relaja los vasos sanguíneos. No tomarlo durante el embarazo. Está indicado para presión alta. Tomá agua seguido y controlate la presión de vez en cuando."
+    },
+    {
+      "id": "levotiroxina",
+      "titulo": "Levotiroxina",
+      "texto": "La levotiroxina reemplaza la hormona que la tiroides no produce. Es una hormona tiroidea que ayuda al metabolismo a funcionar bien. No mezclar con calcio ni hierro. Está indicada para tiroides baja hipotiroidismo. Tomala en ayunas al menos treinta minutos antes de desayunar."
+    },
+    {
+      "id": "amlodipina",
+      "titulo": "Amlodipina",
+      "texto": "La amlodipina baja la presión y alivia la angina de pecho. Es un antihipertensivo que abre los vasos sanguíneos para que la sangre fluya mejor. A veces hincha un poco los tobillos. Está indicada para presión alta y angina. Se puede tomar con o sin comida lo importante es la misma hora siempre."
+    },
+    {
+      "id": "aspirina",
+      "titulo": "Aspirina 100mg",
+      "texto": "La aspirina evita que se formen coágulos en la sangre. Es un antiagregante que hace que la sangre fluya sin pegarse. No tomar si tenés úlcera o tomás anticoagulantes. Está indicada para cuidado del corazón. Tomala con comida para proteger el estómago."
+    },
+    {
+      "id": "furosemida",
+      "titulo": "Furosemida",
+      "texto": "La furosemida elimina el líquido que se acumula en el cuerpo. Es un diurético que le ayuda al riñón a sacar el agua de más. Puede bajar el potasio comer banana ayuda. Está indicada para retención de líquido y corazón. Tomala a la mañana para no levantarte de noche."
+    },
+    {
+      "id": "clonazepam",
+      "titulo": "Clonazepam",
+      "texto": "El clonazepam calma la ansiedad y ayuda con las convulsiones. Es un ansiolítico que tranquiliza el sistema nervioso. No dejarlo de golpe hay que ir bajando de a poco. Está indicado para ansiedad y epilepsia. No manejes después de tomarlo. Avisale a alguien de confianza que lo tomás."
+    }
+  ],
+  "indice": {
+    "enalapril": {
+      "enalapril": 0.038461538461538464
+    },
+    "sirve": {
+      "enalapril": 0.038461538461538464
+    },
+    "bajar": {
+      "enalapril": 0.038461538461538464,
+      "furosemida": 0.04
+    },
+    "presión": {
+      "enalapril": 0.07692307692307693,
+      "losartan": 0.13636363636363635,
+      "amlodipina": 0.06666666666666667
+    },
+    "sangre": {
+      "enalapril": 0.038461538461538464,
+      "metformina": 0.038461538461538464,
+      "atorvastatina": 0.05,
+      "amlodipina": 0.03333333333333333,
+      "aspirina": 0.08333333333333333
+    },
+    "antihipertensivo": {
+      "enalapril": 0.038461538461538464,
+      "losartan": 0.045454545454545456,
+      "amlodipina": 0.03333333333333333
+    },
+    "relaja": {
+      "enalapril": 0.038461538461538464,
+      "losartan": 0.045454545454545456
+    },
+    "vasos": {
+      "enalapril": 0.038461538461538464,
+      "losartan": 0.045454545454545456,
+      "amlodipina": 0.03333333333333333
+    },
+    "sanguíneos": {
+      "enalapril": 0.038461538461538464,
+      "losartan": 0.045454545454545456,
+      "amlodipina": 0.03333333333333333
+    },
+    "corazón": {
+      "enalapril": 0.038461538461538464,
+      "aspirina": 0.041666666666666664,
+      "furosemida": 0.04
+    },
+    "trabaje": {
+      "enalapril": 0.038461538461538464
+    },
+    "calma": {
+      "enalapril": 0.038461538461538464,
+      "omeprazol": 0.03571428571428571,
+      "clonazepam": 0.04
+    },
+    "mejor": {
+      "enalapril": 0.038461538461538464,
+      "metformina": 0.038461538461538464,
+      "atorvastatina": 0.05,
+      "amlodipina": 0.03333333333333333
+    },
+    "tomarlo": {
+      "enalapril": 0.038461538461538464,
+      "losartan": 0.045454545454545456,
+      "clonazepam": 0.04
+    },
+    "estás": {
+      "enalapril": 0.038461538461538464
+    },
+    "embarazada": {
+      "enalapril": 0.038461538461538464
+    },
+    "está": {
+      "enalapril": 0.038461538461538464,
+      "metformina": 0.038461538461538464,
+      "atorvastatina": 0.05,
+      "omeprazol": 0.03571428571428571,
+      "losartan": 0.045454545454545456,
+      "levotiroxina": 0.037037037037037035,
+      "amlodipina": 0.03333333333333333,
+      "aspirina": 0.041666666666666664,
+      "furosemida": 0.04,
+      "clonazepam": 0.04
+    },
+    "indicado": {
+      "enalapril": 0.038461538461538464,
+      "omeprazol": 0.03571428571428571,
+      "losartan": 0.045454545454545456,
+      "clonazepam": 0.04
+    },
+    "alta": {
+      "enalapril": 0.038461538461538464,
+      "losartan": 0.045454545454545456,
+      "amlodipina": 0.03333333333333333
+    },
+    "tomalo": {
+      "enalapril": 0.038461538461538464,
+      "omeprazol": 0.03571428571428571
+    },
+    "siempre": {
+      "enalapril": 0.038461538461538464,
+      "amlodipina": 0.03333333333333333
+    },
+    "misma": {
+      "enalapril": 0.038461538461538464,
+      "amlodipina": 0.03333333333333333
+    },
+    "hora": {
+      "enalapril": 0.038461538461538464,
+      "omeprazol": 0.03571428571428571,
+      "amlodipina": 0.03333333333333333
+    },
+    "día": {
+      "enalapril": 0.038461538461538464
+    },
+    "ritual": {
+      "enalapril": 0.038461538461538464
+    },
+    "metformina": {
+      "metformina": 0.038461538461538464
+    },
+    "ayuda": {
+      "metformina": 0.038461538461538464,
+      "levotiroxina": 0.037037037037037035,
+      "furosemida": 0.08,
+      "clonazepam": 0.04
+    },
+    "controlar": {
+      "metformina": 0.038461538461538464
+    },
+    "azúcar": {
+      "metformina": 0.07692307692307693
+    },
+    "antidiabético": {
+      "metformina": 0.038461538461538464
+    },
+    "dice": {
+      "metformina": 0.038461538461538464
+    },
+    "cuerpo": {
+      "metformina": 0.038461538461538464,
+      "furosemida": 0.04
+    },
+    "usar": {
+      "metformina": 0.038461538461538464
+    },
+    "avisale": {
+      "metformina": 0.038461538461538464,
+      "clonazepam": 0.04
+    },
+    "médico": {
+      "metformina": 0.038461538461538464,
+      "omeprazol": 0.03571428571428571
+    },
+    "tenés": {
+      "metformina": 0.038461538461538464,
+      "aspirina": 0.041666666666666664
+    },
+    "problemas": {
+      "metformina": 0.038461538461538464
+    },
+    "riñón": {
+      "metformina": 0.038461538461538464,
+      "furosemida": 0.04
+    },
+    "indicada": {
+      "metformina": 0.038461538461538464,
+      "atorvastatina": 0.05,
+      "levotiroxina": 0.037037037037037035,
+      "amlodipina": 0.03333333333333333,
+      "aspirina": 0.041666666666666664,
+      "furosemida": 0.04
+    },
+    "diabetes": {
+      "metformina": 0.038461538461538464
+    },
+    "tipo": {
+      "metformina": 0.038461538461538464
+    },
+    "dos": {
+      "metformina": 0.038461538461538464
+    },
+    "tomala": {
+      "metformina": 0.038461538461538464,
+      "levotiroxina": 0.037037037037037035,
+      "aspirina": 0.041666666666666664,
+      "furosemida": 0.04
+    },
+    "comida": {
+      "metformina": 0.038461538461538464,
+      "amlodipina": 0.03333333333333333,
+      "aspirina": 0.041666666666666664
+    },
+    "así": {
+      "metformina": 0.038461538461538464
+    },
+    "estómago": {
+      "metformina": 0.038461538461538464,
+      "omeprazol": 0.07142857142857142,
+      "aspirina": 0.041666666666666664
+    },
+    "agradece": {
+      "metformina": 0.038461538461538464
+    },
+    "atorvastatina": {
+      "atorvastatina": 0.05
+    },
+    "baja": {
+      "atorvastatina": 0.05,
+      "losartan": 0.045454545454545456,
+      "levotiroxina": 0.037037037037037035,
+      "amlodipina": 0.03333333333333333
+    },
+    "colesterol": {
+      "atorvastatina": 0.1
+    },
+    "malo": {
+      "atorvastatina": 0.05
+    },
+    "hipolipemiante": {
+      "atorvastatina": 0.05
+    },
+    "limpia": {
+      "atorvastatina": 0.05
+    },
+    "grasas": {
+      "atorvastatina": 0.05
+    },
+    "acumulan": {
+      "atorvastatina": 0.05
+    },
+    "tomar": {
+      "atorvastatina": 0.05,
+      "amlodipina": 0.03333333333333333,
+      "aspirina": 0.041666666666666664
+    },
+    "jugo": {
+      "atorvastatina": 0.05
+    },
+    "pomelo": {
+      "atorvastatina": 0.05
+    },
+    "alto": {
+      "atorvastatina": 0.05
+    },
+    "noche": {
+      "atorvastatina": 0.05,
+      "furosemida": 0.04
+    },
+    "momento": {
+      "atorvastatina": 0.05
+    },
+    "tomarla": {
+      "atorvastatina": 0.05
+    },
+    "omeprazol": {
+      "omeprazol": 0.03571428571428571
+    },
+    "protege": {
+      "omeprazol": 0.03571428571428571
+    },
+    "acidez": {
+      "omeprazol": 0.07142857142857142
+    },
+    "gastroprotector": {
+      "omeprazol": 0.03571428571428571
+    },
+    "reduce": {
+      "omeprazol": 0.03571428571428571
+    },
+    "ácido": {
+      "omeprazol": 0.03571428571428571
+    },
+    "produce": {
+      "omeprazol": 0.03571428571428571,
+      "levotiroxina": 0.037037037037037035
+    },
+    "tomás": {
+      "omeprazol": 0.03571428571428571,
+      "aspirina": 0.041666666666666664,
+      "clonazepam": 0.04
+    },
+    "mucho": {
+      "omeprazol": 0.03571428571428571
+    },
+    "tiempo": {
+      "omeprazol": 0.03571428571428571
+    },
+    "hablá": {
+      "omeprazol": 0.03571428571428571
+    },
+    "tu": {
+      "omeprazol": 0.03571428571428571
+    },
+    "gastritis": {
+      "omeprazol": 0.03571428571428571
+    },
+    "reflujo": {
+      "omeprazol": 0.03571428571428571
+    },
+    "media": {
+      "omeprazol": 0.03571428571428571
+    },
+    "antes": {
+      "omeprazol": 0.03571428571428571,
+      "levotiroxina": 0.037037037037037035
+    },
+    "desayuno": {
+      "omeprazol": 0.03571428571428571
+    },
+    "vasito": {
+      "omeprazol": 0.03571428571428571
+    },
+    "agua": {
+      "omeprazol": 0.03571428571428571,
+      "losartan": 0.045454545454545456,
+      "furosemida": 0.04
+    },
+    "losartán": {
+      "losartan": 0.045454545454545456
+    },
+    "cuida": {
+      "losartan": 0.045454545454545456
+    },
+    "riñones": {
+      "losartan": 0.045454545454545456
+    },
+    "durante": {
+      "losartan": 0.045454545454545456
+    },
+    "embarazo": {
+      "losartan": 0.045454545454545456
+    },
+    "tomá": {
+      "losartan": 0.045454545454545456
+    },
+    "seguido": {
+      "losartan": 0.045454545454545456
+    },
+    "controlate": {
+      "losartan": 0.045454545454545456
+    },
+    "vez": {
+      "losartan": 0.045454545454545456
+    },
+    "levotiroxina": {
+      "levotiroxina": 0.037037037037037035
+    },
+    "reemplaza": {
+      "levotiroxina": 0.037037037037037035
+    },
+    "hormona": {
+      "levotiroxina": 0.07407407407407407
+    },
+    "tiroides": {
+      "levotiroxina": 0.07407407407407407
+    },
+    "tiroidea": {
+      "levotiroxina": 0.037037037037037035
+    },
+    "metabolismo": {
+      "levotiroxina": 0.037037037037037035
+    },
+    "funcionar": {
+      "levotiroxina": 0.037037037037037035
+    },
+    "bien": {
+      "levotiroxina": 0.037037037037037035
+    },
+    "mezclar": {
+      "levotiroxina": 0.037037037037037035
+    },
+    "calcio": {
+      "levotiroxina": 0.037037037037037035
+    },
+    "ni": {
+      "levotiroxina": 0.037037037037037035
+    },
+    "hierro": {
+      "levotiroxina": 0.037037037037037035
+    },
+    "hipotiroidismo": {
+      "levotiroxina": 0.037037037037037035
+    },
+    "ayunas": {
+      "levotiroxina": 0.037037037037037035
+    },
+    "menos": {
+      "levotiroxina": 0.037037037037037035
+    },
+    "treinta": {
+      "levotiroxina": 0.037037037037037035
+    },
+    "minutos": {
+      "levotiroxina": 0.037037037037037035
+    },
+    "desayunar": {
+      "levotiroxina": 0.037037037037037035
+    },
+    "amlodipina": {
+      "amlodipina": 0.03333333333333333
+    },
+    "alivia": {
+      "amlodipina": 0.03333333333333333
+    },
+    "angina": {
+      "amlodipina": 0.06666666666666667
+    },
+    "pecho": {
+      "amlodipina": 0.03333333333333333
+    },
+    "abre": {
+      "amlodipina": 0.03333333333333333
+    },
+    "fluya": {
+      "amlodipina": 0.03333333333333333,
+      "aspirina": 0.041666666666666664
+    },
+    "veces": {
+      "amlodipina": 0.03333333333333333
+    },
+    "hincha": {
+      "amlodipina": 0.03333333333333333
+    },
+    "poco": {
+      "amlodipina": 0.03333333333333333,
+      "clonazepam": 0.04
+    },
+    "tobillos": {
+      "amlodipina": 0.03333333333333333
+    },
+    "puede": {
+      "amlodipina": 0.03333333333333333,
+      "furosemida": 0.04
+    },
+    "sin": {
+      "amlodipina": 0.03333333333333333,
+      "aspirina": 0.041666666666666664
+    },
+    "importante": {
+      "amlodipina": 0.03333333333333333
+    },
+    "aspirina": {
+      "aspirina": 0.041666666666666664
+    },
+    "evita": {
+      "aspirina": 0.041666666666666664
+    },
+    "formen": {
+      "aspirina": 0.041666666666666664
+    },
+    "coágulos": {
+      "aspirina": 0.041666666666666664
+    },
+    "antiagregante": {
+      "aspirina": 0.041666666666666664
+    },
+    "hace": {
+      "aspirina": 0.041666666666666664
+    },
+    "pegarse": {
+      "aspirina": 0.041666666666666664
+    },
+    "úlcera": {
+      "aspirina": 0.041666666666666664
+    },
+    "anticoagulantes": {
+      "aspirina": 0.041666666666666664
+    },
+    "cuidado": {
+      "aspirina": 0.041666666666666664
+    },
+    "proteger": {
+      "aspirina": 0.041666666666666664
+    },
+    "furosemida": {
+      "furosemida": 0.04
+    },
+    "elimina": {
+      "furosemida": 0.04
+    },
+    "líquido": {
+      "furosemida": 0.08
+    },
+    "acumula": {
+      "furosemida": 0.04
+    },
+    "diurético": {
+      "furosemida": 0.04
+    },
+    "sacar": {
+      "furosemida": 0.04
+    },
+    "potasio": {
+      "furosemida": 0.04
+    },
+    "comer": {
+      "furosemida": 0.04
+    },
+    "banana": {
+      "furosemida": 0.04
+    },
+    "retención": {
+      "furosemida": 0.04
+    },
+    "mañana": {
+      "furosemida": 0.04
+    },
+    "levantarte": {
+      "furosemida": 0.04
+    },
+    "clonazepam": {
+      "clonazepam": 0.04
+    },
+    "ansiedad": {
+      "clonazepam": 0.08
+    },
+    "convulsiones": {
+      "clonazepam": 0.04
+    },
+    "ansiolítico": {
+      "clonazepam": 0.04
+    },
+    "tranquiliza": {
+      "clonazepam": 0.04
+    },
+    "sistema": {
+      "clonazepam": 0.04
+    },
+    "nervioso": {
+      "clonazepam": 0.04
+    },
+    "dejarlo": {
+      "clonazepam": 0.04
+    },
+    "golpe": {
+      "clonazepam": 0.04
+    },
+    "ir": {
+      "clonazepam": 0.04
+    },
+    "bajando": {
+      "clonazepam": 0.04
+    },
+    "epilepsia": {
+      "clonazepam": 0.04
+    },
+    "manejes": {
+      "clonazepam": 0.04
+    },
+    "después": {
+      "clonazepam": 0.04
+    },
+    "alguien": {
+      "clonazepam": 0.04
+    },
+    "confianza": {
+      "clonazepam": 0.04
+    }
+  },
+  "idf": {
+    "enalapril": 2.7047480922384253,
+    "sirve": 2.7047480922384253,
+    "bajar": 2.2992829841302607,
+    "presión": 2.01160091167848,
+    "sangre": 1.6061358035703155,
+    "antihipertensivo": 2.01160091167848,
+    "relaja": 2.2992829841302607,
+    "vasos": 2.01160091167848,
+    "sanguíneos": 2.01160091167848,
+    "corazón": 2.01160091167848,
+    "trabaje": 2.7047480922384253,
+    "calma": 2.01160091167848,
+    "mejor": 1.7884573603642702,
+    "tomarlo": 2.01160091167848,
+    "estás": 2.7047480922384253,
+    "embarazada": 2.7047480922384253,
+    "está": 1.0,
+    "indicado": 1.7884573603642702,
+    "alta": 2.01160091167848,
+    "tomalo": 2.2992829841302607,
+    "siempre": 2.2992829841302607,
+    "misma": 2.2992829841302607,
+    "hora": 2.01160091167848,
+    "día": 2.7047480922384253,
+    "ritual": 2.7047480922384253,
+    "metformina": 2.7047480922384253,
+    "ayuda": 1.7884573603642702,
+    "controlar": 2.7047480922384253,
+    "azúcar": 2.7047480922384253,
+    "antidiabético": 2.7047480922384253,
+    "dice": 2.7047480922384253,
+    "cuerpo": 2.2992829841302607,
+    "usar": 2.7047480922384253,
+    "avisale": 2.2992829841302607,
+    "médico": 2.2992829841302607,
+    "tenés": 2.2992829841302607,
+    "problemas": 2.7047480922384253,
+    "riñón": 2.2992829841302607,
+    "indicada": 1.4519851237430572,
+    "diabetes": 2.7047480922384253,
+    "tipo": 2.7047480922384253,
+    "dos": 2.7047480922384253,
+    "tomala": 1.7884573603642702,
+    "comida": 2.01160091167848,
+    "así": 2.7047480922384253,
+    "estómago": 2.01160091167848,
+    "agradece": 2.7047480922384253,
+    "atorvastatina": 2.7047480922384253,
+    "baja": 1.7884573603642702,
+    "colesterol": 2.7047480922384253,
+    "malo": 2.7047480922384253,
+    "hipolipemiante": 2.7047480922384253,
+    "limpia": 2.7047480922384253,
+    "grasas": 2.7047480922384253,
+    "acumulan": 2.7047480922384253,
+    "tomar": 2.01160091167848,
+    "jugo": 2.7047480922384253,
+    "pomelo": 2.7047480922384253,
+    "alto": 2.7047480922384253,
+    "noche": 2.2992829841302607,
+    "momento": 2.7047480922384253,
+    "tomarla": 2.7047480922384253,
+    "omeprazol": 2.7047480922384253,
+    "protege": 2.7047480922384253,
+    "acidez": 2.7047480922384253,
+    "gastroprotector": 2.7047480922384253,
+    "reduce": 2.7047480922384253,
+    "ácido": 2.7047480922384253,
+    "produce": 2.2992829841302607,
+    "tomás": 2.01160091167848,
+    "mucho": 2.7047480922384253,
+    "tiempo": 2.7047480922384253,
+    "hablá": 2.7047480922384253,
+    "tu": 2.7047480922384253,
+    "gastritis": 2.7047480922384253,
+    "reflujo": 2.7047480922384253,
+    "media": 2.7047480922384253,
+    "antes": 2.2992829841302607,
+    "desayuno": 2.7047480922384253,
+    "vasito": 2.7047480922384253,
+    "agua": 2.01160091167848,
+    "losartán": 2.7047480922384253,
+    "cuida": 2.7047480922384253,
+    "riñones": 2.7047480922384253,
+    "durante": 2.7047480922384253,
+    "embarazo": 2.7047480922384253,
+    "tomá": 2.7047480922384253,
+    "seguido": 2.7047480922384253,
+    "controlate": 2.7047480922384253,
+    "vez": 2.7047480922384253,
+    "levotiroxina": 2.7047480922384253,
+    "reemplaza": 2.7047480922384253,
+    "hormona": 2.7047480922384253,
+    "tiroides": 2.7047480922384253,
+    "tiroidea": 2.7047480922384253,
+    "metabolismo": 2.7047480922384253,
+    "funcionar": 2.7047480922384253,
+    "bien": 2.7047480922384253,
+    "mezclar": 2.7047480922384253,
+    "calcio": 2.7047480922384253,
+    "ni": 2.7047480922384253,
+    "hierro": 2.7047480922384253,
+    "hipotiroidismo": 2.7047480922384253,
+    "ayunas": 2.7047480922384253,
+    "menos": 2.7047480922384253,
+    "treinta": 2.7047480922384253,
+    "minutos": 2.7047480922384253,
+    "desayunar": 2.7047480922384253,
+    "amlodipina": 2.7047480922384253,
+    "alivia": 2.7047480922384253,
+    "angina": 2.7047480922384253,
+    "pecho": 2.7047480922384253,
+    "abre": 2.7047480922384253,
+    "fluya": 2.2992829841302607,
+    "veces": 2.7047480922384253,
+    "hincha": 2.7047480922384253,
+    "poco": 2.2992829841302607,
+    "tobillos": 2.7047480922384253,
+    "puede": 2.2992829841302607,
+    "sin": 2.2992829841302607,
+    "importante": 2.7047480922384253,
+    "aspirina": 2.7047480922384253,
+    "evita": 2.7047480922384253,
+    "formen": 2.7047480922384253,
+    "coágulos": 2.7047480922384253,
+    "antiagregante": 2.7047480922384253,
+    "hace": 2.7047480922384253,
+    "pegarse": 2.7047480922384253,
+    "úlcera": 2.7047480922384253,
+    "anticoagulantes": 2.7047480922384253,
+    "cuidado": 2.7047480922384253,
+    "proteger": 2.7047480922384253,
+    "furosemida": 2.7047480922384253,
+    "elimina": 2.7047480922384253,
+    "líquido": 2.7047480922384253,
+    "acumula": 2.7047480922384253,
+    "diurético": 2.7047480922384253,
+    "sacar": 2.7047480922384253,
+    "potasio": 2.7047480922384253,
+    "comer": 2.7047480922384253,
+    "banana": 2.7047480922384253,
+    "retención": 2.7047480922384253,
+    "mañana": 2.7047480922384253,
+    "levantarte": 2.7047480922384253,
+    "clonazepam": 2.7047480922384253,
+    "ansiedad": 2.7047480922384253,
+    "convulsiones": 2.7047480922384253,
+    "ansiolítico": 2.7047480922384253,
+    "tranquiliza": 2.7047480922384253,
+    "sistema": 2.7047480922384253,
+    "nervioso": 2.7047480922384253,
+    "dejarlo": 2.7047480922384253,
+    "golpe": 2.7047480922384253,
+    "ir": 2.7047480922384253,
+    "bajando": 2.7047480922384253,
+    "epilepsia": 2.7047480922384253,
+    "manejes": 2.7047480922384253,
+    "después": 2.7047480922384253,
+    "alguien": 2.7047480922384253,
+    "confianza": 2.7047480922384253
+  },
+  "tfidf": {
+    "enalapril": {
+      "enalapril": 0.10402877277840097,
+      "sirve": 0.10402877277840097,
+      "bajar": 0.08843396092808696,
+      "presión": 0.1547385316675754,
+      "sangre": 0.06177445398347368,
+      "antihipertensivo": 0.0773692658337877,
+      "relaja": 0.08843396092808696,
+      "vasos": 0.0773692658337877,
+      "sanguíneos": 0.0773692658337877,
+      "corazón": 0.0773692658337877,
+      "trabaje": 0.10402877277840097,
+      "calma": 0.0773692658337877,
+      "mejor": 0.06878682155247193,
+      "tomarlo": 0.0773692658337877,
+      "estás": 0.10402877277840097,
+      "embarazada": 0.10402877277840097,
+      "está": 0.038461538461538464,
+      "indicado": 0.06878682155247193,
+      "alta": 0.0773692658337877,
+      "tomalo": 0.08843396092808696,
+      "siempre": 0.08843396092808696,
+      "misma": 0.08843396092808696,
+      "hora": 0.0773692658337877,
+      "día": 0.10402877277840097,
+      "ritual": 0.10402877277840097
+    },
+    "metformina": {
+      "metformina": 0.10402877277840097,
+      "ayuda": 0.06878682155247193,
+      "controlar": 0.10402877277840097,
+      "azúcar": 0.20805754555680195,
+      "sangre": 0.06177445398347368,
+      "antidiabético": 0.10402877277840097,
+      "dice": 0.10402877277840097,
+      "cuerpo": 0.08843396092808696,
+      "usar": 0.10402877277840097,
+      "mejor": 0.06878682155247193,
+      "avisale": 0.08843396092808696,
+      "médico": 0.08843396092808696,
+      "tenés": 0.08843396092808696,
+      "problemas": 0.10402877277840097,
+      "riñón": 0.08843396092808696,
+      "está": 0.038461538461538464,
+      "indicada": 0.05584558168242528,
+      "diabetes": 0.10402877277840097,
+      "tipo": 0.10402877277840097,
+      "dos": 0.10402877277840097,
+      "tomala": 0.06878682155247193,
+      "comida": 0.0773692658337877,
+      "así": 0.10402877277840097,
+      "estómago": 0.0773692658337877,
+      "agradece": 0.10402877277840097
+    },
+    "atorvastatina": {
+      "atorvastatina": 0.13523740461192127,
+      "baja": 0.08942286801821352,
+      "colesterol": 0.27047480922384254,
+      "malo": 0.13523740461192127,
+      "hipolipemiante": 0.13523740461192127,
+      "limpia": 0.13523740461192127,
+      "grasas": 0.13523740461192127,
+      "acumulan": 0.13523740461192127,
+      "sangre": 0.08030679017851577,
+      "tomar": 0.100580045583924,
+      "jugo": 0.13523740461192127,
+      "pomelo": 0.13523740461192127,
+      "está": 0.05,
+      "indicada": 0.07259925618715286,
+      "alto": 0.13523740461192127,
+      "noche": 0.11496414920651304,
+      "mejor": 0.08942286801821352,
+      "momento": 0.13523740461192127,
+      "tomarla": 0.13523740461192127
+    },
+    "omeprazol": {
+      "omeprazol": 0.09659814615137233,
+      "protege": 0.09659814615137233,
+      "estómago": 0.1436857794056057,
+      "calma": 0.07184288970280285,
+      "acidez": 0.19319629230274465,
+      "gastroprotector": 0.09659814615137233,
+      "reduce": 0.09659814615137233,
+      "ácido": 0.09659814615137233,
+      "produce": 0.08211724943322359,
+      "tomás": 0.07184288970280285,
+      "mucho": 0.09659814615137233,
+      "tiempo": 0.09659814615137233,
+      "hablá": 0.09659814615137233,
+      "tu": 0.09659814615137233,
+      "médico": 0.08211724943322359,
+      "está": 0.03571428571428571,
+      "indicado": 0.06387347715586679,
+      "gastritis": 0.09659814615137233,
+      "reflujo": 0.09659814615137233,
+      "tomalo": 0.08211724943322359,
+      "media": 0.09659814615137233,
+      "hora": 0.07184288970280285,
+      "antes": 0.08211724943322359,
+      "desayuno": 0.09659814615137233,
+      "vasito": 0.09659814615137233,
+      "agua": 0.07184288970280285
+    },
+    "losartan": {
+      "losartán": 0.12294309510174661,
+      "baja": 0.0812935163801941,
+      "presión": 0.2743092152288836,
+      "cuida": 0.12294309510174661,
+      "riñones": 0.12294309510174661,
+      "antihipertensivo": 0.09143640507629454,
+      "relaja": 0.10451286291501186,
+      "vasos": 0.09143640507629454,
+      "sanguíneos": 0.09143640507629454,
+      "tomarlo": 0.09143640507629454,
+      "durante": 0.12294309510174661,
+      "embarazo": 0.12294309510174661,
+      "está": 0.045454545454545456,
+      "indicado": 0.0812935163801941,
+      "alta": 0.09143640507629454,
+      "tomá": 0.12294309510174661,
+      "agua": 0.09143640507629454,
+      "seguido": 0.12294309510174661,
+      "controlate": 0.12294309510174661,
+      "vez": 0.12294309510174661
+    },
+    "levotiroxina": {
+      "levotiroxina": 0.10017585526808982,
+      "reemplaza": 0.10017585526808982,
+      "hormona": 0.20035171053617964,
+      "tiroides": 0.20035171053617964,
+      "produce": 0.0851586290418615,
+      "tiroidea": 0.10017585526808982,
+      "ayuda": 0.06623916149497297,
+      "metabolismo": 0.10017585526808982,
+      "funcionar": 0.10017585526808982,
+      "bien": 0.10017585526808982,
+      "mezclar": 0.10017585526808982,
+      "calcio": 0.10017585526808982,
+      "ni": 0.10017585526808982,
+      "hierro": 0.10017585526808982,
+      "está": 0.037037037037037035,
+      "indicada": 0.053777226805298416,
+      "baja": 0.06623916149497297,
+      "hipotiroidismo": 0.10017585526808982,
+      "tomala": 0.06623916149497297,
+      "ayunas": 0.10017585526808982,
+      "menos": 0.10017585526808982,
+      "treinta": 0.10017585526808982,
+      "minutos": 0.10017585526808982,
+      "antes": 0.0851586290418615,
+      "desayunar": 0.10017585526808982
+    },
+    "amlodipina": {
+      "amlodipina": 0.09015826974128084,
+      "baja": 0.05961524534547567,
+      "presión": 0.134106727445232,
+      "alivia": 0.09015826974128084,
+      "angina": 0.18031653948256168,
+      "pecho": 0.09015826974128084,
+      "antihipertensivo": 0.067053363722616,
+      "abre": 0.09015826974128084,
+      "vasos": 0.067053363722616,
+      "sanguíneos": 0.067053363722616,
+      "sangre": 0.053537860119010516,
+      "fluya": 0.07664276613767536,
+      "mejor": 0.05961524534547567,
+      "veces": 0.09015826974128084,
+      "hincha": 0.09015826974128084,
+      "poco": 0.07664276613767536,
+      "tobillos": 0.09015826974128084,
+      "está": 0.03333333333333333,
+      "indicada": 0.04839950412476857,
+      "alta": 0.067053363722616,
+      "puede": 0.07664276613767536,
+      "tomar": 0.067053363722616,
+      "sin": 0.07664276613767536,
+      "comida": 0.067053363722616,
+      "importante": 0.09015826974128084,
+      "misma": 0.07664276613767536,
+      "hora": 0.067053363722616,
+      "siempre": 0.07664276613767536
+    },
+    "aspirina": {
+      "aspirina": 0.11269783717660105,
+      "evita": 0.11269783717660105,
+      "formen": 0.11269783717660105,
+      "coágulos": 0.11269783717660105,
+      "sangre": 0.1338446502975263,
+      "antiagregante": 0.11269783717660105,
+      "hace": 0.11269783717660105,
+      "fluya": 0.0958034576720942,
+      "sin": 0.0958034576720942,
+      "pegarse": 0.11269783717660105,
+      "tomar": 0.08381670465326999,
+      "tenés": 0.0958034576720942,
+      "úlcera": 0.11269783717660105,
+      "tomás": 0.08381670465326999,
+      "anticoagulantes": 0.11269783717660105,
+      "está": 0.041666666666666664,
+      "indicada": 0.060499380155960715,
+      "cuidado": 0.11269783717660105,
+      "corazón": 0.08381670465326999,
+      "tomala": 0.07451905668184458,
+      "comida": 0.08381670465326999,
+      "proteger": 0.11269783717660105,
+      "estómago": 0.08381670465326999
+    },
+    "furosemida": {
+      "furosemida": 0.10818992368953702,
+      "elimina": 0.10818992368953702,
+      "líquido": 0.21637984737907404,
+      "acumula": 0.10818992368953702,
+      "cuerpo": 0.09197131936521043,
+      "diurético": 0.10818992368953702,
+      "ayuda": 0.14307658882914162,
+      "riñón": 0.09197131936521043,
+      "sacar": 0.10818992368953702,
+      "agua": 0.08046403646713919,
+      "puede": 0.09197131936521043,
+      "bajar": 0.09197131936521043,
+      "potasio": 0.10818992368953702,
+      "comer": 0.10818992368953702,
+      "banana": 0.10818992368953702,
+      "está": 0.04,
+      "indicada": 0.05807940494972229,
+      "retención": 0.10818992368953702,
+      "corazón": 0.08046403646713919,
+      "tomala": 0.07153829441457081,
+      "mañana": 0.10818992368953702,
+      "levantarte": 0.10818992368953702,
+      "noche": 0.09197131936521043
+    },
+    "clonazepam": {
+      "clonazepam": 0.10818992368953702,
+      "calma": 0.08046403646713919,
+      "ansiedad": 0.21637984737907404,
+      "ayuda": 0.07153829441457081,
+      "convulsiones": 0.10818992368953702,
+      "ansiolítico": 0.10818992368953702,
+      "tranquiliza": 0.10818992368953702,
+      "sistema": 0.10818992368953702,
+      "nervioso": 0.10818992368953702,
+      "dejarlo": 0.10818992368953702,
+      "golpe": 0.10818992368953702,
+      "ir": 0.10818992368953702,
+      "bajando": 0.10818992368953702,
+      "poco": 0.09197131936521043,
+      "está": 0.04,
+      "indicado": 0.07153829441457081,
+      "epilepsia": 0.10818992368953702,
+      "manejes": 0.10818992368953702,
+      "después": 0.10818992368953702,
+      "tomarlo": 0.08046403646713919,
+      "avisale": 0.09197131936521043,
+      "alguien": 0.10818992368953702,
+      "confianza": 0.10818992368953702,
+      "tomás": 0.08046403646713919
+    }
+  }
+}
