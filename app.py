@@ -729,7 +729,8 @@ elif opcion == "📊  Dashboard":
         st.bar_chart(df_top.set_index("Consulta")["Veces"])
         with st.expander("Ver tabla"):
             df_top.index = range(1, len(df_top)+1)
-            st.dataframe(df_top, use_container_width=True)
+            # CORREGIDO: use_container_width -> width="stretch"
+            st.dataframe(df_top, width="stretch")
     else:
         st.info("Hacé algunas consultas primero para ver el ranking.")
 
@@ -793,21 +794,22 @@ elif opcion == "📊  Dashboard":
             "WER": f"{h['wer']:.3f}" if h.get("wer") else "—",
             "ms": h.get("tiempo_ms") or "—",
         } for h in historial_completo[:20]]
-        st.dataframe(pd.DataFrame(filas), use_container_width=True)
+        # CORREGIDO: use_container_width -> width="stretch"
+        st.dataframe(pd.DataFrame(filas), width="stretch")
 
     st.markdown("---")
-    st.markdown("### 👑 Última Evaluación IR")
-    ultima = stats["ultima_evaluacion"]
+    st.markdown("### 👑 Última Evaluación del Motor de Búsqueda (IR)")
+    ultima = stats.get("ultima_evaluacion")
     if ultima:
         e1, e2, e3 = st.columns(3)
-        e1.markdown(f'<div class="stat-card"><div class="stat-val">{ultima.get("f1",0) or 0:.3f}</div><div class="stat-label">F1 Score</div></div>', unsafe_allow_html=True)
-        e2.markdown(f'<div class="stat-card"><div class="stat-val-accent">{ultima.get("precision_ir",0) or 0:.3f}</div><div class="stat-label">Precisión</div></div>', unsafe_allow_html=True)
-        e3.markdown(f'<div class="stat-card"><div class="stat-val">{ultima.get("recall_ir",0) or 0:.3f}</div><div class="stat-label">Recall</div></div>', unsafe_allow_html=True)
+        e1.markdown(f'<div class="stat-card"><div class="stat-val">{ultima.get("f1",0):.3f}</div><div class="stat-label">F1 Score</div></div>', unsafe_allow_html=True)
+        e2.markdown(f'<div class="stat-card"><div class="stat-val-accent">{ultima.get("precision",0):.3f}</div><div class="stat-label">Precisión</div></div>', unsafe_allow_html=True)
+        e3.markdown(f'<div class="stat-card"><div class="stat-val">{ultima.get("recobrado",0):.3f}</div><div class="stat-label">Recall (Recobrado)</div></div>', unsafe_allow_html=True)
     else:
-        st.info("Corré la evaluación en la sección 🔬 para ver las métricas.")
+        st.info("No hay evaluaciones de búsqueda guardadas todavía. Podés correr una desde la pestaña de Evaluación.")
 
 # ══════════════════════════════════════════════════════════════════════
-# EVALUACIÓN
+# EVALUACIÓN DEL SISTEMA
 # ══════════════════════════════════════════════════════════════════════
 elif opcion == "🔬  Evaluación":
     st.markdown("""
@@ -824,6 +826,7 @@ elif opcion == "🔬  Evaluación":
         "🔍 P/R/F1 — Búsqueda", "🏷️ Accuracy NER"
     ])
 
+    # ── 1. WER ──────────────────────────────────────────────────────
     with tab_wer:
         st.markdown("### Word Error Rate — Reconocimiento de Voz")
         frases = get_frases_prueba()
@@ -834,28 +837,154 @@ elif opcion == "🔬  Evaluación":
         import pandas as pd, statistics as stats_mod
         pares = []
         for i, ref in enumerate(frases[:10]):
-            hip = st.text_input(f"Transcripción frase {i+1}:", key=f"wer_{i}", placeholder="lo que capturó el sistema")
+            hip = st.text_input(
+                f"Transcripción frase {i+1}:",
+                key=f"wer_{i}",
+                placeholder="lo que capturó el sistema"
+            )
             if hip.strip():
-                pares.append({"#": i+1, "Referencia": ref, "Transcripción": hip, "WER": round(calcular_wer(ref, hip), 4)})
+                pares.append({
+                    "#": i+1,
+                    "Referencia": ref,
+                    "Transcripción": hip,
+                    "WER": round(calcular_wer(ref, hip), 4)
+                })
         if pares:
             df_w = pd.DataFrame(pares)
             st.dataframe(df_w, use_container_width=True)
             wer_lista = [p["WER"] for p in pares]
             c1, c2 = st.columns(2)
             c1.metric("WER Promedio", f"{stats_mod.mean(wer_lista):.4f}")
-            c2.metric("Desviación Estándar", f"{stats_mod.stdev(wer_lista):.4f}" if len(wer_lista) > 1 else "—")
+            c2.metric("Desviación Estándar",
+                      f"{stats_mod.stdev(wer_lista):.4f}" if len(wer_lista) > 1 else "—")
+        else:
+            st.info("💡 Escribí una transcripción arriba para calcular el WER.")
 
+    # ── 2. PERPLEJIDAD ───────────────────────────────────────────────
     with tab_pp:
-        import pandas as pd
+        import pandas as pd, statistics as stats_mod
         st.markdown("### Perplejidad — Modelo N-gramas con suavizado Add-k")
         frases_test = [
             "para qué sirve el enalapril",
             "el omeprazol protege el estómago",
             "la levotiroxina se toma en ayunas",
             "tomo la metformina con la comida",
+            "hoy hace mucho calor afuera",
+            "el gato subió al árbol del parque",
         ]
-        # Resto de la lógica correspondiente a la sección de N-gramas...
+        st.write("Frases del dominio vs fuera del dominio:")
+        resultados_pp = []
+        for f in frases_test:
+            pp_val = calcular_perplejidad(f, n=2, k=1.0)
+            resultados_pp.append({
+                "Frase": f,
+                "Perplejidad": round(pp_val, 2),
+                "¿Del dominio?": "✅ Sí" if pp_val < 100 else "❌ No"
+            })
+        df_pp = pd.DataFrame(resultados_pp)
+        st.dataframe(df_pp, use_container_width=True)
+        pp_valores = [r["Perplejidad"] for r in resultados_pp]
+        st.metric("Perplejidad Promedio", f"{stats_mod.mean(pp_valores):.2f}")
 
+        st.markdown("---")
+        st.markdown("**Top-10 bigramas para 'enalapril':**")
+        top = modelo_bigrama.top_bigramas_por_contexto("enalapril", top_n=10)
+        if top:
+            st.dataframe(
+                pd.DataFrame(top)[["contexto", "siguiente", "conteo", "probabilidad"]],
+                use_container_width=True
+            )
+
+        st.markdown("---")
+        k_val = st.slider("Probar suavizado Add-k con k =", 0.01, 5.0, 1.0, 0.01)
+        if st.button("Calcular perplejidad con este k", key="btn_pp_k"):
+            m_temp = ModeloNGramas(n=2, k=k_val)
+            m_temp.entrenar(preparar_corpus(CORPUS_PICCOLO))
+            frase_d = "para qué sirve el enalapril"
+            st.metric(
+                f"PP de '{frase_d}' con k={k_val}",
+                f"{m_temp.perplejidad(frase_d):.4f}"
+            )
+
+    # ── 3. P/R/F1 ────────────────────────────────────────────────────
+    with tab_ir:
+        st.markdown("### Evaluación del Motor de Búsqueda — P / R / F1")
+        st.write("Presioná el botón para evaluar el motor sobre las consultas de prueba etiquetadas.")
+
+        # CORRECCIÓN: un solo botón con key único
+        if st.button("▶ Ejecutar Evaluación IR", key="btn_evaluar_ir"):
+            with st.spinner("Calculando precisión, recall y F1-score..."):
+                # CORRECCIÓN: evaluar_motor necesita el motor como argumento
+                eval_res = evaluar_motor(motor_busqueda, top_n=3)
+
+            import pandas as pd
+            st.dataframe(pd.DataFrame(eval_res["detalle"]), use_container_width=True)
+
+            ir1, ir2, ir3 = st.columns(3)
+            ir1.metric("Precisión", f"{eval_res['precision_promedio']:.4f}")
+            ir2.metric("Recall", f"{eval_res['recall_promedio']:.4f}")
+            ir3.metric("F1-Score", f"{eval_res['f1_promedio']:.4f}")
+
+            # Guardar en BD
+            stats_act = obtener_estadisticas()
+            guardar_evaluacion(
+                total_charlas=stats_act["total_charlas"],
+                f1=eval_res["f1_promedio"],
+                precision_ir=eval_res["precision_promedio"],
+                recall_ir=eval_res["recall_promedio"],
+            )
+            st.success("✅ Evaluación guardada. Ya aparece en el Dashboard.")
+
+            # Persistir en session_state para que no desaparezca
+            st.session_state["ultima_eval_ir"] = eval_res
+
+        # Mostrar última evaluación si existe en session_state
+        if "ultima_eval_ir" in st.session_state:
+            ev = st.session_state["ultima_eval_ir"]
+            st.markdown("**Última evaluación corrida en esta sesión:**")
+            col1, col2, col3 = st.columns(3)
+            col1.metric("Precisión", f"{ev['precision_promedio']:.4f}")
+            col2.metric("Recall", f"{ev['recall_promedio']:.4f}")
+            col3.metric("F1-Score", f"{ev['f1_promedio']:.4f}")
+        else:
+            st.info("💡 Todavía no se corrió la evaluación. Presioná el botón de arriba.")
+
+    # ── 4. ACCURACY NER ──────────────────────────────────────────────
+    with tab_ner:
+        st.markdown("### Accuracy NER — Reconocimiento de Entidades")
+        st.write("Evaluación sobre 20 ejemplos anotados manualmente (MEDICAMENTO, DOSIS, FRECUENCIA).")
+
+        if st.button("▶ Evaluar NER", key="btn_evaluar_ner"):
+            with st.spinner("Calculando accuracy..."):
+                # CORRECCIÓN: calcular_accuracy_ner devuelve un dict, no un float
+                resultado_ner = calcular_accuracy_ner(EJEMPLOS_NER)
+
+            # Accuracy global
+            st.metric(
+                "Accuracy Global NER",
+                f"{resultado_ner['accuracy_global']:.1%}"
+            )
+            st.write(f"Correctas: **{resultado_ner['correctos']}** / {resultado_ner['total']} entidades")
+
+            # Accuracy por tipo
+            import pandas as pd
+            filas_tipo = [
+                {"Tipo de Entidad": tipo, "Accuracy": f"{acc:.1%}"}
+                for tipo, acc in resultado_ner["accuracy_por_tipo"].items()
+            ]
+            st.dataframe(pd.DataFrame(filas_tipo), use_container_width=True)
+
+            # Detalle de ejemplos
+            from modules.nlp import extraer_entidades
+            with st.expander("Ver detalle de los 20 ejemplos"):
+                det = [{
+                    "Texto": e["texto"],
+                    "Esperadas": str(e["entidades_esperadas"]),
+                    "Obtenidas": str({k: v for k, v in extraer_entidades(e["texto"]).items() if v})
+                } for e in EJEMPLOS_NER]
+                st.dataframe(pd.DataFrame(det), use_container_width=True)
+        else:
+            st.info("💡 Presioná el botón para calcular la accuracy NER.")
 # ══════════════════════════════════════════════════════════════════════
 # EMERGENCIAS
 # ══════════════════════════════════════════════════════════════════════
@@ -863,26 +992,24 @@ elif opcion == "📞  Emergencias":
     st.markdown("""
     <div class="page-header">
         <div class="page-header-text">
-            <h1>Números de Emergencia</h1>
-            <p>Acceso rápido a asistencia médica inmediata</p>
+            <h1>Contactos de Emergencia</h1>
+            <p>Asistencia inmediata ante situaciones críticas</p>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
-    c1, c2 = st.columns(2)
+    c1, c2 = st.columns(2, gap="large")
     with c1:
-        st.markdown(f"""
+        st.markdown("""
         <div class="emergencia-card">
-            <div class="label">🚨 Emergencias Médicas</div>
             <div class="num">107</div>
-            <p style="color:#c03030; margin-top:10px; font-weight:500;">Llamada gratuita nacional</p>
+            <div class="label">Emergencias Médicas (SAME)</div>
         </div>
         """, unsafe_allow_html=True)
     with c2:
         st.markdown(f"""
         <div class="contacto-card">
-            <div class="label">📞 Contacto del Familiar Registrado</div>
-            <div class="val" style="font-size:1.8rem; margin:15px 0;">{paciente.get('quien_avisar','No asignado')}</div>
-            <p style="color:#4a7cca; font-weight:500;">Aviso inmediato en caso de malestar</p>
+            <div class="label">Contacto de Confianza Guardado</div>
+            <div class="val">{paciente.get('quien_avisar','No asignado')}</div>
         </div>
         """, unsafe_allow_html=True)
