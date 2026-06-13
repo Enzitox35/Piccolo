@@ -192,7 +192,10 @@ El dashboard muestra en tiempo real:
 
 ## 👥 Integrantes del equipo
 
-> Completar con los nombres del grupo
+
+- Enzo Mellado
+- Gladys González
+- Lucas Pardo
 
 ---
 

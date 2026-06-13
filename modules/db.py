@@ -110,6 +110,49 @@ def crear_base_datos():
 
     conn.commit()
     conn.close()
+    migrar_base_datos()  # agrega columnas faltantes si la BD ya existía con versión vieja
+
+
+def migrar_base_datos():
+    """
+    Agrega columnas faltantes a tablas existentes (ALTER TABLE).
+    Se ejecuta automáticamente en cada inicio — es idempotente (no rompe nada si ya están).
+    Necesario cuando piccolo.db fue creado con una versión anterior de este archivo.
+    """
+    conn = get_connection()
+
+    # Columnas requeridas por tabla: {tabla: [(columna, tipo_sql)]}
+    migraciones = {
+        "como_le_fue": [
+            ("total_charlas",        "INTEGER DEFAULT 0"),
+            ("wer_promedio",         "REAL"),
+            ("perplejidad_promedio", "REAL"),
+            ("f1",                   "REAL"),
+            ("precision_ir",         "REAL"),
+            ("recall_ir",            "REAL"),
+            ("aciertos_ner",         "REAL"),
+            ("tiempo_promedio_ms",   "INTEGER"),
+        ],
+        "conversaciones": [
+            ("wer",       "REAL"),
+            ("perplejidad","REAL"),
+            ("similitud",  "REAL"),
+            ("tiempo_ms",  "INTEGER"),
+        ],
+    }
+
+    for tabla, columnas in migraciones.items():
+        # Obtener columnas actuales de la tabla
+        existentes = {
+            row[1]
+            for row in conn.execute(f"PRAGMA table_info({tabla})").fetchall()
+        }
+        for columna, tipo in columnas:
+            if columna not in existentes:
+                conn.execute(f"ALTER TABLE {tabla} ADD COLUMN {columna} {tipo}")
+
+    conn.commit()
+    conn.close()
 
 
 def cargar_saberes_iniciales():
@@ -387,7 +430,7 @@ def guardar_evaluacion(
 
 
 if __name__ == "__main__":
-    crear_base_datos()
+    crear_base_datos()  # incluye migrar_base_datos() internamente
     cargar_saberes_iniciales()
     exito, mensaje = probar_conexion()
     print(f"Estado: {mensaje}")
