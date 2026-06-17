@@ -296,14 +296,66 @@ if MODULOS_OK:
 
     motor_busqueda, modelo_bigrama = _init_recursos()
 
-# ── SIDEBAR ───────────────────────────────────────────────────────────
+    @st.cache_resource
+    def _init_recursos():
+        motor = get_motor()
+        modelo = get_modelo(n=2, k=1.0)
+        return motor, modelo
+
+    motor_busqueda, modelo_bigrama = _init_recursos()
+
+# ══════════════════════════════════════════════════════════════════════
+# BARRA LATERAL (SIDEBAR)
+# ══════════════════════════════════════════════════════════════════════
 with st.sidebar:
     st.markdown("""
-    <div class="sidebar-brand">
-        <div class="brand-name">Piccolo</div>
-        <div class="brand-sub">Asistente de Salud</div>
+    <div style="text-align: center; margin-bottom: 10px;">
+        <span style="font-size: 40px; font-weight: bold; color: #a8d5b5; vertical-align: middle;">Piccolo</span>
     </div>
     """, unsafe_allow_html=True)
+    # 🏛️ DESCARGO DE RESPONSABILIDAD PEDIDO POR EL PROFESOR
+    st.markdown("""
+    <div style="
+        background: linear-gradient(135deg, rgba(237,125,49,0.12) 0%, rgba(255,192,0,0.08) 100%);
+        border: 1px solid rgba(237,125,49,0.45);
+        border-left: 4px solid #ED7D31;
+        border-radius: 12px;
+        padding: 14px 16px;
+        margin: 6px 0 14px;
+    ">
+        <div style="
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #FFC000 !important;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        ">🏛️ Trabajo Institucional Académico</div>
+        <div style="
+            font-size: 0.78rem;
+            color: rgba(212,232,216,0.9) !important;
+            line-height: 1.55;
+        ">
+            Proyecto de práctica educativa. La información es de uso
+            <strong style='color:#FFD09B !important;'>exclusivamente académico</strong>
+            y <strong style='color:#FFD09B !important;'>no tiene fines médicos.</strong>
+        </div>
+        <div style="
+            margin-top: 10px;
+            padding-top: 9px;
+            border-top: 1px solid rgba(237,125,49,0.25);
+            font-size: 0.72rem;
+            color: rgba(212,232,216,0.65) !important;
+            font-style: italic;
+        ">
+            No reemplaza diagnóstico ni prescripción profesional.
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    st.markdown("---")
 
     try:
         st.image("Piccolo-PNG-Picture.png", use_container_width=True)

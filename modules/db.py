@@ -1,11 +1,6 @@
 """
 modules/db.py — Capa de persistencia SQLite
 Sistema Piccolo — Asistente de medicamentos por voz para adultos mayores
-
-Versión corregida y completa que:
-- Arregla el bug de nombre de tabla (era 'saberes_medicamentos', es 'saberes_piccolo')
-- Agrega funciones para guardar/recuperar métricas de evaluación
-- Incluye función para obtener estadísticas del dashboard
 """
 
 import sqlite3
@@ -49,7 +44,7 @@ def crear_base_datos():
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS saberes_piccolo (
             id               INTEGER PRIMARY KEY AUTOINCREMENT,
-            nombre_medicina  TEXT NOT NULL,
+            nombre_medicina  TEXT NOT NULL UNIQUE,
             para_que_sirve   TEXT,
             tipo             TEXT,
             que_hace         TEXT,
@@ -95,16 +90,16 @@ def crear_base_datos():
 
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS como_le_fue (
-            id                 INTEGER PRIMARY KEY AUTOINCREMENT,
-            fecha              TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            total_charlas      INTEGER DEFAULT 0,
-            wer_promedio       REAL,
+            id                   INTEGER PRIMARY KEY AUTOINCREMENT,
+            fecha                TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            total_charlas        INTEGER DEFAULT 0,
+            wer_promedio         REAL,
             perplejidad_promedio REAL,
-            f1                 REAL,
-            precision_ir       REAL,
-            recall_ir          REAL,
-            aciertos_ner       REAL,
-            tiempo_promedio_ms INTEGER
+            f1                   REAL,
+            precision_ir         REAL,
+            recall_ir            REAL,
+            aciertos_ner         REAL,
+            tiempo_promedio_ms   INTEGER
         )
     """)
 
@@ -156,12 +151,10 @@ def migrar_base_datos():
 
 
 def cargar_saberes_iniciales():
-    conn = get_connection()
-    ya_sabe = conn.execute("SELECT COUNT(*) FROM saberes_piccolo").fetchone()[0]
-    if ya_sabe > 0:
-        conn.close()
-        return
-
+    """
+    Carga los medicamentos base usando INSERT OR IGNORE.
+    Gracias al UNIQUE en nombre_medicina, nunca se duplican.
+    """
     saberes = [
         ("Enalapril", "Ayuda a bajar la presión de la sangre", "Antihipertensivo",
          "Relaja los vasos sanguíneos para que el corazón trabaje con más calma",
@@ -203,17 +196,39 @@ def cargar_saberes_iniciales():
          "Tranquiliza el sistema nervioso",
          "No dejarlo de golpe, hay que ir bajando de a poco", "Ansiedad / Epilepsia",
          "No manejes después de tomarlo. Avisale a alguien de confianza que lo tomás."),
+         # ... (los medicamentos que ya tenías)
+    
+    ("Paracetamol", "Para aliviar dolores leves a moderados y bajar la fiebre.", "Analgésico y Antipirético", "Bloquea las señales de dolor en el cerebro y actúa sobre el centro regulador de la temperatura.", "No superar la dosis máxima diaria para evitar daño en el hígado. Evitar consumir alcohol.", "Adultos y niños (según dosis y presentación).", "Es ideal para cuadros gripales o dolores de cabeza comunes, pero recordá respetar los horarios."),
+    
+    ("Ibuprofeno 600mg", "Para calmar dolores moderados, desinflamar y bajar la fiebre.", "Analgésico, Antiinflamatorio (AINE) y Antipirético", "Inhibe la producción de sustancias que causan inflamación y dolor en el cuerpo.", "Tomar siempre con alimentos para proteger el estómago. No usar en casos de úlceras o problemas renales graves.", "Adultos y adolescentes mayores de 12 años.", "Es muy efectivo para dolores musculares o inflamaciones, pero no lo tomes con el estómago vacío."),
+    
+    ("Sertal", "Para aliviar espasmos y dolores cólicos en el abdomen.", "Antiespasmódico", "Relaja los músculos lisos del aparato digestivo y las vías biliares para calmar el retorcijón.", "Puede causar sequedad de boca o visión borrosa si se toma en exceso. Usar con precaución en personas con glaucoma.", "Adultos y niños (según la presentación y prescripción médica).", "Es el aliado clásico cuando cae pesada la comida y aparecen los típicos dolores de panza con espasmos."),
+    
+    ("Hepatalgina", "Para aliviar la pesadez estomacal y ayudar a la digestión.", "Protector hepático y Digestivo", "Estimula la producción y liberación de bilis, facilitando la digestión de las grasas.", "No utilizar si hay obstrucción de las vías biliares o enfermedad hepática grave.", "Adultos.", "Viene genial para esos días de digestión lenta o después de una comida muy pesada."),
+    
+    ("Buscapina", "Para calmar dolores de panza de tipo cólico y espasmos digestivos.", "Antiespasmódico", "Disminuye las contracciones y movimientos involuntarios de las paredes del estómago e intestinos.", "Evitar si se tiene glaucoma, retención urinaria o problemas de próstata.", "Adultos y niños mayores de 6 años (según presentación).", "Ayuda a relajar la panza rápidamente cuando sentís que tenés el estómago 'atado' o con retorcijones."),
+    
+    ("Vitamina C", "Para fortalecer el sistema inmune, actuar como antioxidante y ayudar a absorber el hierro.", "Suplemento Vitamínico", "Participa en la reparación de tejidos y en la defensa del organismo contra infecciones.", "Dosis muy altas pueden causar molestias estomacales o diarrea.", "Público en general, bajo recomendación si se busca suplementar.", "Ideal para acompañar las mañanas, especialmente en épocas de frío o cambios de estación."),
+    
+    ("Vitamina D", "Para fijar el calcio en los huesos y regular el sistema inmunitario.", "Suplemento Vitamínico / Hormona", "Facilita la absorción intestinal del calcio y el fósforo, esenciales para la salud ósea.", "Su exceso se acumula en el cuerpo; se debe tomar bajo control médico para evitar toxicidad.", "Personas con déficit de exposición solar, adultos mayores o según indicación médica.", "Es clave para mantener los huesos fuertes, y muchas veces se complementa con unos minutos diarios de sol."),
+    
+    ("Vitamina B12", "Para el buen funcionamiento del sistema nervioso y la formación de glóbulos rojos.", "Suplemento Vitamínico", "Esencial para el metabolismo celular y el mantenimiento de las neuronas.", "Por lo general es segura, pero su suplementación debe ser guiada por análisis clínicos.", "Especialmente recomendada para vegetarianos, veganos, adultos mayores o por indicación médica.", "Fundamental para evitar la fatiga y mantener la energía. Muy importante revisar sus niveles en sangre."),
+    
+    ("Omega 3", "Para proteger la salud cardiovascular y reducir los triglicéridos.", "Suplemento Nutricional / Ácido Graso Esencial", "Ayuda a disminuir los niveles de grasas malas en sangre y tiene propiedades antiinflamatorias.", "Puede interactuar con medicamentos anticoagulantes. Consultar al médico antes de consumirlo.", "Adultos que busquen mejorar su perfil lipídico o por indicación nutricional.", "Es un gran protector para el corazón, usualmente derivado del aceite de pescado."),
+    
+    ("Magnesio", "Para el buen funcionamiento muscular, nervioso y el alivio de la fatiga.", "Suplemento Mineral", "Interviene en más de 300 reacciones bioquímicas del cuerpo, incluyendo la relajación muscular.", "En exceso puede causar un efecto laxante. Precaución en personas con insuficiencia renal.", "Personas con calambres, fatiga muscular o por recomendación médica.", "Excelente para tomar por la noche si sufrís de contracturas o calambres, ya que ayuda a relajar los músculos.")
     ]
 
+    conn = get_connection()
+    # Buscá esta sección casi al final de cargar_saberes_iniciales()
     conn.executemany("""
-        INSERT INTO saberes_piccolo
+        INSERT OR IGNORE INTO saberes_piccolo
             (nombre_medicina, para_que_sirve, tipo, que_hace,
              tener_cuidado, para_quien, consejo_amigable)
         VALUES (?, ?, ?, ?, ?, ?, ?)
     """, saberes)
     conn.commit()
     conn.close()
-
 
 # =========================
 # PERSONAS
@@ -254,20 +269,17 @@ def eliminar_persona(persona_id):
 # =========================
 
 def obtener_dato_medicina(columna: str, medicamento: str):
-    """
-    Consulta un campo específico de saberes_piccolo para un medicamento.
-    FIX: antes usaba 'saberes_medicamentos' (tabla inexistente).
-    """
     columnas_validas = [
         "para_que_sirve", "tipo", "que_hace",
         "tener_cuidado", "para_quien", "consejo_amigable"
     ]
     if columna not in columnas_validas:
         return None
-
     conn = get_connection()
-    query = f"SELECT {columna} FROM saberes_piccolo WHERE lower(nombre_medicina) = ?"
-    resultado = conn.execute(query, (medicamento.lower(),)).fetchone()
+    resultado = conn.execute(
+        f"SELECT {columna} FROM saberes_piccolo WHERE lower(nombre_medicina) = ?",
+        (medicamento.lower(),)
+    ).fetchone()
     conn.close()
     return resultado
 
@@ -279,8 +291,7 @@ def obtener_todos_saberes():
     return [dict(r) for r in rows]
 
 
-def obtener_medicina_por_nombre(nombre: str) -> dict | None:
-    """Devuelve el registro completo de un medicamento o None si no existe."""
+def obtener_medicina_por_nombre(nombre: str):
     conn = get_connection()
     row = conn.execute(
         "SELECT * FROM saberes_piccolo WHERE lower(nombre_medicina) = ?",
@@ -362,40 +373,32 @@ def obtener_historial(persona_id=None, limite=20):
 
 
 # =========================
-# ESTADÍSTICAS PARA DASHBOARD
+# ESTADÍSTICAS
 # =========================
 
 def obtener_estadisticas():
-    """Devuelve todas las estadísticas necesarias para el dashboard."""
     conn = get_connection()
     stats = {}
 
     stats["total_charlas"] = conn.execute(
         "SELECT COUNT(*) FROM conversaciones").fetchone()[0]
-
     stats["wer_promedio"] = conn.execute(
         "SELECT AVG(wer) FROM conversaciones WHERE wer IS NOT NULL").fetchone()[0]
-
     stats["pp_promedio"] = conn.execute(
         "SELECT AVG(perplejidad) FROM conversaciones WHERE perplejidad IS NOT NULL").fetchone()[0]
-
     stats["tiempo_promedio_ms"] = conn.execute(
         "SELECT AVG(tiempo_ms) FROM conversaciones WHERE tiempo_ms IS NOT NULL").fetchone()[0]
-
     stats["similitud_promedio"] = conn.execute(
         "SELECT AVG(similitud) FROM conversaciones WHERE similitud IS NOT NULL").fetchone()[0]
-
     stats["intenciones_frecuentes"] = [dict(r) for r in conn.execute("""
         SELECT intencion, COUNT(*) as total FROM conversaciones
         WHERE intencion IS NOT NULL
         GROUP BY intencion ORDER BY total DESC LIMIT 10
     """).fetchall()]
-
     stats["charlas_por_dia"] = [dict(r) for r in conn.execute("""
         SELECT DATE(cuando) as dia, COUNT(*) as total
         FROM conversaciones GROUP BY dia ORDER BY dia DESC LIMIT 14
     """).fetchall()]
-
     stats["medicamentos_consultados"] = [dict(r) for r in conn.execute("""
         SELECT s.nombre_medicina, COUNT(*) as total
         FROM conversaciones c
@@ -416,7 +419,6 @@ def guardar_evaluacion(
     f1=None, precision_ir=None, recall_ir=None,
     aciertos_ner=None, tiempo_promedio_ms=None
 ):
-    """Guarda una sesión de evaluación en como_le_fue."""
     conn = get_connection()
     conn.execute("""
         INSERT INTO como_le_fue (
@@ -435,6 +437,6 @@ if __name__ == "__main__":
     exito, mensaje = probar_conexion()
     print(f"Estado: {mensaje}")
     saberes = obtener_todos_saberes()
-    print(f"Medicamentos cargados: {len(saberes)}")
+    print(f"Medicamentos en el corpus: {len(saberes)}")
     for s in saberes:
-        print(f"  - {s['nombre_medicina']}: {s['para_que_sirve']}")
+        print(f"  - {s['nombre_medicina']}")
