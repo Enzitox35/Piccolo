@@ -189,3 +189,8 @@ EJEMPLOS_NER = [
     {"texto": "tomo atorvastatina una vez por día a la noche",
      "entidades_esperadas": {"MEDICAMENTO": ["atorvastatina"], "FRECUENCIA": ["una vez por día"]}},
 ]
+
+Corpus, librerias en el PowerPoint
+Archivos del proyecto donde se muestran los archivos que corresponden a las funcionalidades y apartados 
+de la página
+Mensaje de aclaración sobre que Piccolo es un proyecto educativo

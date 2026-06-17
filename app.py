@@ -4,6 +4,7 @@ import streamlit as st
 import re
 import time
 
+
 RAIZ_PROYECTO = Path(__file__).resolve().parent
 if str(RAIZ_PROYECTO) not in sys.path:
     sys.path.append(str(RAIZ_PROYECTO))
@@ -34,6 +35,7 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
+
 
 st.markdown("""
 <style>
@@ -138,7 +140,8 @@ section[data-testid="stSidebar"] hr { border-color: rgba(255,255,255,0.1) !impor
     font-size: 1.15rem;
     flex-shrink: 0;
 }
-.ficha-icon-verde   { background: #e8f5e0; }
+.ficha-icon-verde   { 
+background: #e8f5e0; }
 .ficha-icon-naranja { background: #fff0e6; }
 .ficha-icon-dorado  { background: #fff8e1; }
 .ficha-text-col { flex: 1; min-width: 0; }
@@ -280,6 +283,65 @@ h1, h2, h3 { font-family: 'Playfair Display', serif !important; color: #1C3A2E !
     color: #ED7D31; font-weight: 700; margin-bottom: 8px;
 }
 .contacto-card .val { font-size: 1.2rem; color: #1C3A2E; font-weight: 600; }
+
+section[data-testid="stSidebar"] hr {
+    border-color: rgba(255,255,255,0.4) !important;
+}
+
+section[data-testid="stSidebar"] * {
+    color: #D4E8D8 !important;
+}
+
+[data-testid="stMain"] h1,
+[data-testid="stMain"] h2,
+[data-testid="stMain"] h3,
+[data-testid="stMain"] h4,
+[data-testid="stMain"] p,
+[data-testid="stMain"] span,
+[data-testid="stMain"] label {
+    color: #1C3A2E !important;
+}
+
+.stTextInput label {
+    color: #1C3A2E !important;
+}
+
+.stRadio label {
+    color: #1C3A2E !important;
+}
+
+.stTextInput input::placeholder {
+    color: #7a9a82 !important;
+    opacity: 1 !important;
+}
+
+.page-header h1 {
+    color: white !important;
+}
+
+.page-header p {
+    color: rgba(255,255,255,0.9) !important;
+}
+
+.page-header-badge {
+    color: white !important;
+}
+
+.page-header h1 {
+    color: #FFFFFF !important;
+}
+
+.page-header p {
+    color: rgba(255,255,255,0.95) !important;
+}
+
+.page-header-badge {
+    color: #FFFFFF !important;
+}
+
+#bienvenido-goku {
+    color: white !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
